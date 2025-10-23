@@ -1,0 +1,103 @@
+/* Header.css */
+.header {
+  background: var(--secondary-color);
+  color: var(--text-color);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed; /* Make header fixed */
+  top: 0;
+  left: 200px; /* Offset by sidebar width */
+  right: 0;
+  z-index: 1001; /* Higher than sidebar */
+  height: 60px; /* Fixed height */
+  transition: left 0.3s ease;
+  padding-left: 0px;
+}
+
+.header.collapsed {
+  left: 60px; /* No offset when sidebar is collapsed */
+}
+
+.header.mobile {
+  left: 0; /* No offset in mobile view */
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Sidebar toggle button (left side) */
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+/* App title (center) */
+.header-content h1 {
+  flex: 1; /* Take remaining space */
+  text-align: center;
+  margin: 0;
+  font-size: 18px; /* Smaller font size for mobile */
+}
+
+/* User actions (right side) */
+.user-actions {
+  position: relative;
+}
+
+.user-button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* Position below the user button */
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 150px;
+}
+
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.dropdown-menu button:hover {
+  background: #f4f4f4;
+}
+
+/* Media query for mobile view */
+@media (max-width: 768px) {
+  .header {
+    left: 0; /* No offset in mobile view */
+  }
+
+  .header-content h1 {
+    font-size: 16px; /* Smaller font size for mobile */
+  }
+}

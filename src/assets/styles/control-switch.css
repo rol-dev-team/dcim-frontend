@@ -1,0 +1,94 @@
+
+.custom-toggle-switch {
+  display: flex; 
+  justify-content: center;
+  align-items: center; 
+  position: relative;
+  margin-bottom: 15px; 
+
+}
+
+
+.custom-toggle-switch .form-check-input {
+  width: 100px; 
+  height: 52px; 
+  border-radius: 25px; 
+  position: relative; 
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #ff4d4f; 
+  transition: background-color 0.3s ease, transform 0.3s ease; 
+  outline: none; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+}
+
+.custom-toggle-switch .form-check-input:checked {
+  background-color: #52c41a; 
+}
+
+.custom-toggle-switch .form-check-input::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px; 
+  width: 42px; 
+  height: 42px; 
+  border-radius: 50%;
+  background-color: white;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+}
+
+.custom-toggle-switch .form-check-input:checked::before {
+  transform: translateX(50px);
+}
+
+.custom-toggle-switch .form-check-input::after {
+  content: 'OFF';
+  position: absolute;
+  top: 50%;
+  right: 15px; 
+  transform: translateY(-50%);
+  color: white; 
+  font-size: 18px; 
+  font-weight: bold;
+  opacity: 1; 
+  transition: opacity 0.3s ease;
+  pointer-events: none; 
+}
+
+.custom-toggle-switch .form-check-input:checked::after {
+  content: 'ON'; 
+  left: 15px; 
+  right: auto; 
+  opacity: 1; 
+}
+
+
+.custom-toggle-switch .form-check-input:checked::after {
+  content: 'ON'; 
+  opacity: 1; 
+}
+
+
+.custom-toggle-switch .form-check-input:not(:checked)::after {
+  content: 'OFF';
+  opacity: 1;
+  right: 15px;
+  left: auto;
+}
+
+.custom-toggle-switch .form-check-input:checked::after {
+  content: 'ON';
+  opacity: 1;
+  left: 15px;
+  right: auto;
+}
+
+
+.custom-toggle-switch .form-check-label {
+  display: none; 
+}
+

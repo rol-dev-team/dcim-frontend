@@ -1,0 +1,118 @@
+/* App.css */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Main layout */
+.main-content {
+  display: flex;
+  margin-left: 200px; /* Offset for the fixed sidebar */
+  padding-top: 60px; /* Offset for the fixed header */
+  padding-bottom: 60px; /* Offset for the fixed footer */
+  transition: margin-left 0.3s ease; /* Smooth transition for sidebar */
+}
+
+.main-content.collapsed {
+  margin-left: 60px; /* Adjust margin when sidebar is collapsed */
+}
+
+.content {
+  flex: 1;
+  padding: 15px;
+}
+
+.sensor-box{
+  text-align:center;
+  width: 230px;
+  height: auto;
+  border: 1px solid gray;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.svg-container svg{
+  width: 100% !important;
+  height: auto !important;
+  margin: -180px 0;
+}
+
+.card-header-tabs{
+  position: relative;
+  z-index: 9;
+}
+
+.alarm-dashboard .box{
+    height: 80px;
+    width: 150px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+/* Media query for mobile view */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0; /* No offset in mobile view */
+  }
+
+  .main-content.collapsed {
+    margin-left: 0; /* No offset in mobile view */
+  }
+}
+@keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* @keyframes blink {
+  0% { background-color: red; }
+  50% { background-color: yellow; }
+  100% { background-color: red; }
+}
+
+.bg-danger-blink {
+  animation: blink 1s infinite;
+} */
+
+
+
+/* @keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+} */
+
+/* @keyframes blink {
+  0%, 100% { background-color: #b02a37; }
+  50% { background-color: white; }
+} */
+
+@keyframes blink {
+  0%, 100% {
+    background-color: rgba(176, 42, 55, 0.1); 
+  }
+  50% {
+    background-color: rgba(176, 42, 55, 0.7); 
+  }
+}
+
+/* @keyframes shake {
+  0%, 100% { transform: scale(1); }
+  75% { transform: scale(1.09); }  
+} */
+.alarm-highlight {
+  /* animation: blink 1.2s ease-in-out infinite, shake 1.2s ease-in-out infinite; */
+   animation: blink 1.2s ease-in-out infinite;
+  color: white;
+  font-weight: bold;
+  /* border: 1px solid transparent !important; */
+}

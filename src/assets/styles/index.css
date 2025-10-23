@@ -1,0 +1,89 @@
+/* :root{
+  --primary-color:#68bbf4;
+  --secondary-color:#DADDE7;
+  --hover-color:#E7E8EB;
+  --text-color:#6C6F7B;
+  --active-color: #C2E7FF;
+  --button-color: #78B928;
+  --white-color: white;
+} */
+/* :root {
+  --primary-color: #68bbf4;
+  --secondary-color: #f1f5fb;
+  --hover-color: lighten(var(--primary-color), 10%);
+  --active-color: darken(var(--primary-color), 10%);
+  --text-color: #6c6f7b;
+  --button-color: #78b928;
+  --white-color: white;
+} */
+
+:root {
+  --primary-color: #3b82f6; /* A bright blue for primary actions like buttons or links */
+  --secondary-color: #f4f5f7; /* Light background for sections to keep the UI clean */
+  --hover-color: #b0d0d0; /* Darker blue for hover interactions */
+  --active-color: #e0e1e1; /* Even darker blue for active buttons or highlighted sections */
+  --text-color: #4b5563; /* A medium gray for text that is not too harsh but still clear */
+  --muted-text-color: #9ca3af; /* A lighter gray for secondary text */
+  --border-color: #d1d5db; /* Light border color for dividing sections */
+  --button-color: #10b981; /* A green button color to indicate success or confirmation */
+  --button-text-color: white; /* Text color for buttons */
+  --danger-color: #ef4444; /* Red for warnings or error messages */
+  --white-color: #ffffff; /* White for background or light components */
+  --dark-background-color: #1f2937; /* Dark background color for sidebars or navigation */
+  --card-background-color: #ffffff; /* White background for card-style sections */
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+a {
+  color: var(--text-color) !important;
+  text-decoration: none !important;
+}
+a:hover {
+  background-color: var(--hover-color);
+}
+p {
+  margin: 0;
+}
+
+.submit-btn {
+  background-color: var(--button-color);
+  color: var(--white-color) !important;
+  padding: 0.375rem 0.75rem;
+  border-radius: 5px;
+  border: 1px solid transparent;
+}
+.add-btn {
+  background-color: var(--button-color);
+  color: var(--white-color) !important;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  border: 1px solid transparent;
+}
+
+.add-btn:hover {
+  background-color: var(--white-color);
+  color: var(--button-color) !important;
+  border: 1px solid var(--button-color);
+}
+
+.card-header {
+  background-color: var(--secondary-color) !important;
+}
