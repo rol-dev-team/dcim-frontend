@@ -1,99 +1,367 @@
+/* --- Global Style Variables & Resets --- */
+
+:root {
+    --primary-blue: #5850e0; /* Vibrant Blue/Purple from image */
+    --background-white: #ffffff;
+    --text-dark: #1f2937; /* Near Black for headings and main text */
+    --text-medium: #4b5563; /* Darker gray for description */
+    --text-light: #6b7280; /* Secondary text/hint gray */
+    --border-light: #e5e7eb; /* Very light gray border/separator */
+    --padding-base: 1rem;
+    --border-radius-base: 6px;
+    --font-sans: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Container and Header --- */
+
 .data-center-list-container {
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .data-center-list-container h2 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 1.75rem;
-    color: #2c3e50;
-    font-weight: 600;
-  }
-  
-  .add-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    font-size: 1rem;
-    font-weight: 500;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 1rem;
-  }
-  
-  .add-button:hover {
-    background-color: #45a049;
-  }
-  
-  
-  
-  /* .action-button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  } */
+    /* Removed max-width/margin to allow it to fill the main content area */
+    padding: 2rem 2.5rem; /* Generous internal padding */
+    background-color: var(--background-white);
+    font-family: var(--font-sans);
+    color: var(--text-dark);
+}
 
-
-  .action-buttons {
+.header-bar {
     display: flex;
-    gap: 8px;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: flex-start; /* Align title and buttons vertically */
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+.title-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.main-header {
+    font-size: 1.75rem; /* Large size */
+    color: var(--text-dark);
+    font-weight: 600; /* Semi-bold */
+    margin: 0;
+    padding: 0;
+}
+
+.description-text {
+    font-size: 0.875rem; /* Small text */
+    color: var(--text-light);
+    margin-top: 0.25rem;
+    padding: 0;
+}
+
+.action-buttons-top {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* --- Button Styling (Applying to CommonButton via classNames) --- */
+
+/* Primary Button (Add Configuration) - Filled Blue */
+.primary-action-btn button {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: var(--border-radius-base);
+    cursor: pointer;
+    transition: background-color 0.15s;
+    display: flex;
     align-items: center;
-  }
-  
-  
-  .edit-btn {
-    background-color: #2196F3;
+    gap: 0.3rem; /* Space for a potential '+' icon */
+}
+
+.primary-action-btn button:hover {
+    background-color: #4338ca; /* Darker blue/purple on hover */
+}
+
+/* Secondary Button (Export) - Outline/Ghost Style */
+.secondary-action-btn button {
+    background-color: transparent;
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue);
+    padding: 0.6rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: var(--border-radius-base);
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.secondary-action-btn button:hover {
+    background-color: var(--primary-blue);
     color: white;
-    margin-right: 6px;
-  }
-  
-  .edit-btn:hover {
-    background-color: #1e88e5;
-  }
-  
-  .delete-btn {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  .delete-btn:hover {
-    background-color: #e53935;
-  }
-  
-  .error-message {
-    color: red;
+}
+
+/* Filter and Columns Buttons (Ghost Style) */
+.ghost-btn {
+    background: none;
+    border: none;
+    color: var(--text-medium);
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--border-radius-base);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.ghost-btn:hover {
+    background-color: var(--border-light);
+}
+
+.ghost-btn .icon {
+    margin-right: 0.25rem;
+    font-size: 0.7rem;
+}
+
+/* --- Table Controls (Search/Filter Bar) --- */
+
+.table-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+}
+
+.search-input {
+    width: 300px;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius-base);
+    font-size: 0.875rem;
+    color: var(--text-dark);
+}
+
+.search-input:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+    box-shadow: 0 0 0 1px var(--primary-blue);
+}
+
+.filter-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* --- Table Styling --- */
+
+.data-center-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Ensures column widths are respected */
+}
+
+/* Table Header */
+.data-center-table thead th {
+    background-color: var(--background-white); /* Keep header background white/very light */
+    color: var(--text-dark);
+    font-size: 0.8rem;
+    font-weight: 600; /* Semi-bold */
+    text-align: left;
+    padding: 0.75rem 0.5rem;
+    /* Only a bottom border for separation */
+    border-bottom: 1px solid var(--border-light); 
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.data-center-table .sortable {
+    cursor: pointer;
+}
+
+.data-center-table .sort-icon {
+    font-size: 0.6rem;
+    color: var(--text-light); /* Default gray */
+    margin-left: 4px;
+    line-height: 1;
+    display: inline-block;
+}
+
+/* Table Body Rows */
+.data-center-table tbody tr {
+    /* No alternating row colors (Zebra stripes) - pure white background */
+    background-color: var(--background-white);
+}
+
+.data-center-table tbody td {
+    color: var(--text-dark);
+    font-size: 0.875rem; /* Standard body text size */
+    padding: 0.75rem 0.5rem;
+    text-align: left;
+    /* Thin light gray row separator */
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: middle;
+    word-wrap: break-word;
+}
+
+/* Table Actions (Icon Buttons) */
+.action-icons {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.edit-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    font-size: 1rem; /* Adjust size for a pencil icon */
+    color: var(--primary-blue);
+    transition: color 0.15s;
+}
+
+.edit-icon-btn:hover {
+    color: #4338ca;
+}
+
+/* --- Footer and Pagination --- */
+
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--border-light); /* Top border to separate from table */
+    font-size: 0.875rem;
+}
+
+.row-count-text {
+    color: var(--text-light);
+    margin: 0;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.page-size-select {
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius-base);
+    color: var(--text-medium);
+    font-size: 0.875rem;
+}
+
+.pagination-info {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.page-number-display {
+    color: var(--text-light);
+    margin-right: 0.5rem;
+}
+
+.page-nav-btn {
+    background: var(--background-white);
+    border: 1px solid var(--border-light);
+    color: var(--text-medium);
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.page-nav-btn:not([disabled]):hover {
+    background-color: var(--border-light);
+    color: var(--primary-blue);
+}
+
+.page-nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.details-link {
+    color: var(--primary-blue);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.details-link:hover {
+    text-decoration: underline;
+}
+
+/* --- Utility/Other Styles --- */
+
+.text-center {
+    text-align: center;
+}
+
+.loading-text {
+    text-align: center;
+    margin: 2rem 0;
+    color: var(--text-light);
+}
+
+.error-message {
+    color: #ef4444; /* Tailwind red-500 equivalent */
     text-align: center;
     margin-top: 1rem;
-  }
-  
-  @media (max-width: 768px) {
+}
+
+/* --- Media Queries (Optional: for mobile layout) --- */
+@media (max-width: 768px) {
     .data-center-list-container {
-      padding: 1rem;
+        padding: 1rem;
     }
-  
-   
-  
-    .action-button {
-      padding: 5px 10px;
+
+    .header-bar {
+        flex-direction: column;
+        align-items: stretch;
     }
-  
-    .add-button {
-      width: 100%;
-      padding: 12px;
+
+    .action-buttons-top {
+        margin-top: 1rem;
+        justify-content: space-around;
     }
-  }
-  
+
+    .table-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    .filter-group {
+        justify-content: space-between;
+    }
+
+    .data-center-table,
+    .data-center-table tbody,
+    .data-center-table tr,
+    .data-center-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .data-center-table thead {
+        display: none; /* Hide header on small screens for card-like layout */
+    }
+
+    .data-center-table td {
+        /* Optional: Add labels for better mobile context */
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    .table-footer {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
