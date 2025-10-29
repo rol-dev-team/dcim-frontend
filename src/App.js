@@ -69,7 +69,7 @@ const App = () => {
           </Route>
 
           <Route path='/admin/*' element={<PrivateRoutes />}>
-            <Route path='home/' element={<Home />} />
+            <Route path='home' element={<Home />} />
             <Route path='alarm-details/:dcId/:id' element={<AlarmDetails />} />
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='reports/device-list' element={<DeviceList />} />
