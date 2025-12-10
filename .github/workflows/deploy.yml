@@ -24,7 +24,7 @@ jobs:
         run: npm install
 
       - name: 4. Build Vite React App
-        run: npm run build
+        run: CI=false npm run build
 
       - name: 5. Clean Up Old Deployment (Delete dist)
         uses: appleboy/ssh-action@v1.0.3
