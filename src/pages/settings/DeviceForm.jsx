@@ -150,7 +150,7 @@
 //                     {loading ? "Saving..." : "Save"}
 //                 </button>
 //                 {/* ----updated by tahsin--- */}
-//        <button 
+//        <button
 //         type="button"
 //         className="btn btn-secondary ms-2"
 //         // onClick={handleCancel}
@@ -165,13 +165,13 @@
 // };
 
 // export default DeviceForm;
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react'; // Import icon
-import Button from "../../components/ui/Button";
+import Button from '../../components/ui/Button';
 
-import { fetchDevice, createDevice, updateDevice } from "../../api/deviceApi";
-import { fetchDataCenters } from "../../api/settings/dataCenterApi";
+import { fetchDevice, createDevice, updateDevice } from '../../api/deviceApi';
+import { fetchDataCenters } from '../../api/settings/dataCenterApi';
 
 // ================================================================
 // 1. CSS FOR LAYOUT AND UI/UX MATCH
@@ -361,248 +361,244 @@ const formLayoutStyles = `
 `;
 // ================================================================
 
-
 const DeviceForm = () => {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const [dataCenters, setDataCenters] = useState([]);
-    const [device, setDevice] = useState({
-        name: "",
-        data_center_id: "",
-        location: "",
-        secret_key: "", // Initialized as empty string for input compatibility
-        control_topic: "", // Initialized as empty string for input compatibility
-        status: 1,
-    });
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [dataCenters, setDataCenters] = useState([]);
+  const [device, setDevice] = useState({
+    name: '',
+    data_center_id: '',
+    location: '',
+    secret_key: '', // Initialized as empty string for input compatibility
+    control_topic: '', // Initialized as empty string for input compatibility
+    status: 1,
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-    const isEditMode = !!id;
+  const isEditMode = !!id;
 
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                const centers = await fetchDataCenters();
-                setDataCenters(centers);
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const centers = await fetchDataCenters();
+        setDataCenters(centers);
 
-                if (isEditMode) {
-                    const existingDevice = await fetchDevice(id);
-                    setDevice({
-                        ...existingDevice,
-                        // Ensure optional fields are handled as strings for input value
-                        secret_key: existingDevice.secret_key || "",
-                        control_topic: existingDevice.control_topic || "",
-                        // Ensure data_center_id is treated as a string/number if API requires
-                        data_center_id: String(existingDevice.data_center_id),
-                        status: String(existingDevice.status) // Convert status to string for select value
-                    });
-                }
-            } catch (err) {
-                setError("Failed to load form data: " + err.message);
-            }
-        };
-        loadData();
-    }, [id, isEditMode]);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setDevice((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        // Basic required field check (since Formik isn't used)
-        if (!device.name || !device.data_center_id || !device.location) {
-            setError("Name, Data Center, and Location are required fields.");
-            return;
+        if (isEditMode) {
+          const existingDevice = await fetchDevice(id);
+          setDevice({
+            ...existingDevice,
+            // Ensure optional fields are handled as strings for input value
+            secret_key: existingDevice.secret_key || '',
+            control_topic: existingDevice.control_topic || '',
+            // Ensure data_center_id is treated as a string/number if API requires
+            data_center_id: String(existingDevice.data_center_id),
+            status: String(existingDevice.status), // Convert status to string for select value
+          });
         }
-
-        setLoading(true);
-        setError(null);
-
-        try {
-            // Prepare data: convert status back to number
-            const dataToSend = {
-                ...device,
-                status: Number(device.status),
-                data_center_id: Number(device.data_center_id),
-                // Send null for empty optional fields if API expects it
-                secret_key: device.secret_key || null,
-                control_topic: device.control_topic || null,
-            }
-
-            if (isEditMode) {
-                await updateDevice(id, dataToSend);
-            } else {
-                await createDevice(dataToSend);
-            }
-            navigate("/admin/settings/devices-list");
-        } catch (err) {
-            setError("Save failed: " + err.message);
-            setLoading(false);
-        }
+      } catch (err) {
+        setError('Failed to load form data: ' + err.message);
+      }
     };
-    
-    const handleCancel = () => {
-        navigate('/admin/settings/devices-list');
-    };
+    loadData();
+  }, [id, isEditMode]);
 
-    const formTitle = isEditMode ? "Edit Device Details" : "Device Registration";
-    const formSubtitle = isEditMode ? "Modify the existing device details." : "Register a new device for monitoring and control.";
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setDevice((prev) => ({ ...prev, [name]: value }));
+  };
 
-    return (
-        <>
-            <style>{buttonStyles}</style>
-            <style>{formLayoutStyles}</style>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-            <div className="form-container">
-                {/* ================================================================
+    // Basic required field check (since Formik isn't used)
+    if (!device.name || !device.data_center_id || !device.location) {
+      setError('Name, Data Center, and Location are required fields.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Prepare data: convert status back to number
+      const dataToSend = {
+        ...device,
+        status: Number(device.status),
+        data_center_id: Number(device.data_center_id),
+        // Send null for empty optional fields if API expects it
+        secret_key: device.secret_key || null,
+        control_topic: device.control_topic || null,
+      };
+
+      if (isEditMode) {
+        await updateDevice(id, dataToSend);
+      } else {
+        await createDevice(dataToSend);
+      }
+      navigate('/admin/settings/devices-list');
+    } catch (err) {
+      setError('Save failed: ' + err.message);
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    navigate('/admin/settings/devices-list');
+  };
+
+  const formTitle = isEditMode ? 'Edit Device Details' : 'Device Registration';
+  const formSubtitle = isEditMode
+    ? 'Modify the existing device details.'
+    : 'Register a new device for monitoring and control.';
+
+  return (
+    <>
+      <style>{buttonStyles}</style>
+      <style>{formLayoutStyles}</style>
+
+      <div className="form-container">
+        {/* ================================================================
                     HEADER SECTION
                     ================================================================ */}
-                <header className="form-header">
-                    <div className="form-title-group">
-                        <h1>
-                            <Button
-                                type="button"
-                                variant="ghost" 
-                                leftIcon={ArrowLeft}
-                                onClick={handleCancel}
-                                className="header-back-button"
-                                aria-label="Back to Devices list"
-                            >
-                                {/* Empty children */}
-                            </Button>
-                            {formTitle}
-                        </h1>
-                        <p>{formSubtitle}</p>
-                    </div>
-                </header>
+        <header className="form-header">
+          <div className="form-title-group">
+            <h1>
+              <Button
+                type="button"
+                variant="ghost"
+                leftIcon={ArrowLeft}
+                onClick={handleCancel}
+                className="header-back-button"
+                aria-label="Back to Devices list"
+              >
+                {/* Empty children */}
+              </Button>
+              {formTitle}
+            </h1>
+            <p>{formSubtitle}</p>
+          </div>
+        </header>
 
-                {error && <div className="alert-danger">{error}</div>}
+        {error && <div className="alert-danger">{error}</div>}
 
-                {/* ================================================================
+        {/* ================================================================
                     FORM (Grid Layout)
                     ================================================================ */}
-                <form onSubmit={handleSubmit}>
-                    <div className="form-grid">
-                        
-                        {/* Row 1: Name and Data Center */}
-                        <div className="form-group">
-                            <label htmlFor="name">Name</label>
-                            <input
-                                type="text"
-                                id="name"
-                                name="name"
-                                value={device.name}
-                                onChange={handleChange}
-                                className="form-control"
-                                required
-                            />
-                        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-grid">
+            {/* Row 1: Name and Data Center */}
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={device.name}
+                onChange={handleChange}
+                className="form-control"
+                required
+              />
+            </div>
 
-                        <div className="form-group">
-                            <label htmlFor="data_center_id">Data Center</label>
-                            <select
-                                id="data_center_id"
-                                name="data_center_id"
-                                value={device.data_center_id}
-                                onChange={handleChange}
-                                className="form-control"
-                                required
-                            >
-                                <option value="">Select Data Center</option>
-                                {dataCenters.map((dc) => (
-                                    <option key={dc.id} value={dc.id}>
-                                        {dc.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+            <div className="form-group">
+              <label htmlFor="data_center_id">Data Center</label>
+              <select
+                id="data_center_id"
+                name="data_center_id"
+                value={device.data_center_id}
+                onChange={handleChange}
+                className="form-control"
+                required
+              >
+                <option value="">Select Data Center</option>
+                {dataCenters.map((dc) => (
+                  <option key={dc.id} value={dc.id}>
+                    {dc.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-                        {/* Row 2: Location and Status */}
-                        <div className="form-group">
-                            <label htmlFor="location">Location</label>
-                            <input
-                                type="text"
-                                id="location"
-                                name="location"
-                                value={device.location}
-                                onChange={handleChange}
-                                className="form-control"
-                                required
-                            />
-                        </div>
-                        
-                        <div className="form-group">
-                            <label htmlFor="status">Status</label>
-                            <select
-                                id="status"
-                                name="status"
-                                value={device.status}
-                                onChange={handleChange}
-                                className="form-control"
-                                required
-                            >
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
+            {/* Row 2: Location and Status */}
+            <div className="form-group">
+              <label htmlFor="location">Location</label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={device.location}
+                onChange={handleChange}
+                className="form-control"
+                required
+              />
+            </div>
 
-                        {/* Row 3: Received Topic and Control Topic (Optional fields) */}
-                        <div className="form-group">
-                            <label htmlFor="secret_key">Received Topic (Optional)</label>
-                            <input
-                                type="text"
-                                id="secret_key"
-                                name="secret_key"
-                                value={device.secret_key}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="e.g., devices/temp_sensor/data"
-                            />
-                        </div>
+            <div className="form-group">
+              <label htmlFor="status">Status</label>
+              <select
+                id="status"
+                name="status"
+                value={device.status}
+                onChange={handleChange}
+                className="form-control"
+                required
+              >
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+              </select>
+            </div>
 
-                        <div className="form-group">
-                            <label htmlFor="control_topic">Control Topic (Optional)</label>
-                            <input
-                                type="text"
-                                id="control_topic"
-                                name="control_topic"
-                                value={device.control_topic}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="e.g., devices/temp_sensor/control"
-                            />
-                        </div>
-                    </div>
+            {/* Row 3: Received Topic and Control Topic (Optional fields) */}
+            <div className="form-group">
+              <label htmlFor="secret_key">Received Topic (Optional)</label>
+              <input
+                type="text"
+                id="secret_key"
+                name="secret_key"
+                value={device.secret_key}
+                onChange={handleChange}
+                className="form-control"
+                placeholder="e.g., devices/temp_sensor/data"
+              />
+            </div>
 
-                    {/* ================================================================
+            <div className="form-group">
+              <label htmlFor="control_topic">Control Topic</label>
+              <input
+                type="text"
+                id="control_topic"
+                name="control_topic"
+                value={device.control_topic}
+                onChange={handleChange}
+                className="form-control"
+                required
+                placeholder="e.g., devices/temp_sensor/control"
+              />
+            </div>
+          </div>
+
+          {/* ================================================================
                         ACTIONS FOOTER (Uses new Button component)
                         ================================================================ */}
-                    <div className="form-actions">
-                        <Button
-                            type="button"
-                            intent="secondary"
-                            onClick={handleCancel}
-                            disabled={loading}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            type="submit"
-                            intent="primary"
-                            loading={loading}
-                            loadingText={isEditMode ? 'Updating...' : 'Saving...'}
-                            disabled={loading}
-                        >
-                            {isEditMode ? 'Update' : 'Save'}
-                        </Button>
-                    </div>
-                </form>
-            </div>
-        </>
-    );
+          <div className="form-actions">
+            <Button type="button" intent="secondary" onClick={handleCancel} disabled={loading}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              intent="primary"
+              loading={loading}
+              loadingText={isEditMode ? 'Updating...' : 'Saving...'}
+              disabled={loading}
+            >
+              {isEditMode ? 'Update' : 'Save'}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </>
+  );
 };
 
 export default DeviceForm;

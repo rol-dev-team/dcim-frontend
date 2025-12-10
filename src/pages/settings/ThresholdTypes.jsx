@@ -175,8 +175,6 @@
 //               />
 //             </div>
 
-
-
 //             <div className="d-flex gap-2">
 //     <CommonButton
 //       name={isEditing ? 'update' : 'save'}
@@ -191,8 +189,6 @@
 //     )}
 //   </div>
 
-
-           
 //           </form>
 //         </div>
 
@@ -219,8 +215,6 @@
 //                     </span>
 //                   </td>
 
-
-
 //                 <td>
 //   <div className="d-flex gap-2">
 //     <CommonButton name="edit" onClick={() => handleEdit(type.id)} />
@@ -228,9 +222,6 @@
 //   </div>
 // </td>
 
-
-
-                  
 //                 </tr>
 //               ))}
 //             </tbody>
@@ -259,7 +250,7 @@ import {
   fetchThresholdType,
   createThresholdType,
   updateThresholdType,
-  deleteThresholdType
+  deleteThresholdType,
 } from '../../api/thresholdTypeApi';
 
 // Helper function for text contrast
@@ -277,64 +268,64 @@ function getContrastColor(hexColor) {
 const styles = {
   // Layout
   pageContainer: {
-    minHeight: "100vh",
-    backgroundColor: "#f8fafc",
-    padding: "3rem 4rem",
+    minHeight: '100vh',
+    backgroundColor: '#f8fafc',
+    padding: '3rem 4rem',
     boxSizing: 'border-box',
   },
   contentWrapper: {
-    width: "100%",
+    width: '100%',
   },
   headerSection: {
-    marginBottom: "2rem",
+    marginBottom: '2rem',
     textAlign: 'left',
     paddingBottom: '1rem',
     borderBottom: '1px solid #e5e7eb',
   },
   heading: {
-    fontSize: "2rem",
+    fontSize: '2rem',
     fontWeight: 600,
-    color: "#111827",
-    marginBottom: "0.25rem",
+    color: '#111827',
+    marginBottom: '0.25rem',
     letterSpacing: '-0.02em',
   },
   description: {
-    fontSize: "1rem",
-    color: "#6b7280",
+    fontSize: '1rem',
+    color: '#6b7280',
     lineHeight: 1.5,
   },
 
   // Alerts
   alert: {
-    padding: "0.5rem 1rem",
-    borderRadius: "0.5rem",
-    fontSize: "0.9rem",
-    marginBottom: "1.5rem",
+    padding: '0.5rem 1rem',
+    borderRadius: '0.5rem',
+    fontSize: '0.9rem',
+    marginBottom: '1.5rem',
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
   },
   alertError: {
-    backgroundColor: "#fef2f2",
-    color: "#b91c1c",
-    border: "1px solid #fecaca",
+    backgroundColor: '#fef2f2',
+    color: '#b91c1c',
+    border: '1px solid #fecaca',
   },
   alertSuccess: {
-    backgroundColor: "#f0fdf4",
-    color: "#047857",
-    border: "1px solid #bbf7d0",
+    backgroundColor: '#f0fdf4',
+    color: '#047857',
+    border: '1px solid #bbf7d0',
   },
 
   // Form Group Block (Used for both Form and List container)
   formGroupBlock: {
     // marginBottom removed from individual block to be managed by gap in grid
-    padding: "32px",
-    backgroundColor: "#ffffff",
-    border: "1px solid #e5e7eb",
-    borderRadius: "0.5rem",
+    padding: '32px',
+    backgroundColor: '#ffffff',
+    border: '1px solid #e5e7eb',
+    borderRadius: '0.5rem',
     boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
   },
-  
+
   // Form elements (inline styles for dynamic parts)
   inputStyle: {
     width: '100%',
@@ -364,7 +355,7 @@ const ThresholdTypes = () => {
     attach_sound: null,
     url: '',
     color: '#3b82f6',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -396,13 +387,13 @@ const ThresholdTypes = () => {
       const file = files[0];
       setFormData({
         ...formData,
-        [name]: file
+        [name]: file,
       });
       setFileName(file ? file.name : '');
     } else {
       setFormData({
         ...formData,
-        [name]: value
+        [name]: value,
       });
     }
   };
@@ -448,7 +439,7 @@ const ThresholdTypes = () => {
         attach_sound: null,
         url: threshold.url || '',
         color: threshold.color || '#3b82f6',
-        timestamp: threshold.timestamp || new Date().toISOString()
+        timestamp: threshold.timestamp || new Date().toISOString(),
       });
       setFileName('');
       setIsEditing(true);
@@ -463,7 +454,7 @@ const ThresholdTypes = () => {
         await deleteThresholdType(id);
         await loadThresholdTypes();
         if (currentThreshold && currentThreshold.id === id) {
-            resetForm();
+          resetForm();
         }
       } catch (err) {
         setError(err.message || 'Failed to delete threshold type.');
@@ -477,7 +468,7 @@ const ThresholdTypes = () => {
       attach_sound: null,
       url: '',
       color: '#3b82f6',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
     setFileName('');
     setIsEditing(false);
@@ -486,7 +477,14 @@ const ThresholdTypes = () => {
 
   if (loading) {
     return (
-      <div style={{ ...styles.pageContainer, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div
+        style={{
+          ...styles.pageContainer,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <div style={{ color: '#6b7280' }}>Loading threshold types...</div>
       </div>
     );
@@ -607,7 +605,6 @@ const ThresholdTypes = () => {
 
       <div style={styles.pageContainer}>
         <div style={styles.contentWrapper}>
-          
           {/* Header Section (Unboxed, DcOwnerMapping style) */}
           <header style={styles.headerSection}>
             <h1 style={styles.heading}>Threshold Types</h1>
@@ -619,14 +616,32 @@ const ThresholdTypes = () => {
           {/* Alerts positioned before the form content blocks */}
           {error && (
             <div style={{ ...styles.alert, ...styles.alertError }}>
-              <svg style={{ width: '20px', height: '20px' }} fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-12a1 1 0 102 0V7a1 1 0 10-2 0V6zm0 4a1 1 0 102 0v4a1 1 0 10-2 0v-4z" clipRule="evenodd" /></svg>
+              <svg
+                style={{ width: '20px', height: '20px' }}
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-12a1 1 0 102 0V7a1 1 0 10-2 0V6zm0 4a1 1 0 102 0v4a1 1 0 10-2 0v-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
               <span style={{ fontSize: '14px', fontWeight: 500 }}>Error: {error}</span>
             </div>
           )}
           {success && (
             <div style={{ ...styles.alert, ...styles.alertSuccess }}>
-              <svg style={{ width: '20px', height: '20px' }} fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              <svg
+                style={{ width: '20px', height: '20px' }}
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
               </svg>
               <span style={{ fontSize: '14px', fontWeight: 500 }}>
                 {isEditing ? 'Threshold updated successfully' : 'Threshold created successfully'}
@@ -636,14 +651,24 @@ const ThresholdTypes = () => {
 
           {/* TWO-COLUMN CONTENT GRID */}
           <div className="grid-container">
-
             {/* Form Section (Left Column) */}
             <div style={styles.formGroupBlock}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#111827', marginBottom: '24px' }}>
+              <h2
+                style={{
+                  fontSize: '1.25rem',
+                  fontWeight: 600,
+                  color: '#111827',
+                  marginBottom: '24px',
+                }}
+              >
                 {isEditing ? 'Edit Threshold Type' : 'Add New Threshold Type'}
               </h2>
 
-              <form onSubmit={handleSubmit} encType="multipart/form-data" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <form
+                onSubmit={handleSubmit}
+                encType="multipart/form-data"
+                style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+              >
                 {/* Name Input */}
                 <div>
                   <label htmlFor="name" style={styles.labelStyle}>
@@ -679,20 +704,45 @@ const ThresholdTypes = () => {
                     <label htmlFor="attach_sound" className="file-label-style">
                       <Upload style={{ width: '20px', height: '20px' }} />
                       <span style={{ fontSize: '14px', fontWeight: 500 }}>
-                        {fileName || (currentThreshold?.attach_sound ? 'Choose new audio file (existing sound present)' : 'Choose audio file')}
+                        {fileName ||
+                          (currentThreshold?.attach_sound
+                            ? 'Choose new audio file (existing sound present)'
+                            : 'Choose audio file')}
                       </span>
                     </label>
                   </div>
                   {(fileName || currentThreshold?.attach_sound) && (
-                    <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#4b5563' }}>
-                      <span style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{fileName || `Current: ${currentThreshold.attach_sound.split('/').pop()}`}</span>
+                    <div
+                      style={{
+                        marginTop: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        fontSize: '14px',
+                        color: '#4b5563',
+                      }}
+                    >
+                      <span
+                        style={{
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {fileName || `Current: ${currentThreshold.attach_sound.split('/').pop()}`}
+                      </span>
                       <button
                         type="button"
                         onClick={() => {
                           setFileName('');
                           setFormData({ ...formData, attach_sound: null });
                         }}
-                        style={{ color: '#9ca3af', border: 'none', background: 'none', cursor: 'pointer' }}
+                        style={{
+                          color: '#9ca3af',
+                          border: 'none',
+                          background: 'none',
+                          cursor: 'pointer',
+                        }}
                         title="Clear selection"
                       >
                         <X style={{ width: '16px', height: '16px' }} />
@@ -702,7 +752,7 @@ const ThresholdTypes = () => {
                 </div>
 
                 {/* URL Input */}
-                <div>
+                {/* <div>
                   <label htmlFor="url" style={styles.labelStyle}>
                     URL
                   </label>
@@ -716,7 +766,7 @@ const ThresholdTypes = () => {
                     style={styles.inputStyle}
                     placeholder="https://example.com"
                   />
-                </div>
+                </div> */}
 
                 {/* Color Input */}
                 <div>
@@ -730,16 +780,34 @@ const ThresholdTypes = () => {
                       name="color"
                       value={formData.color}
                       onChange={handleInputChange}
-                      style={{ width: '64px', height: '48px', borderRadius: '8px', border: '1px solid #d1d5db', cursor: 'pointer' }}
+                      style={{
+                        width: '64px',
+                        height: '48px',
+                        borderRadius: '8px',
+                        border: '1px solid #d1d5db',
+                        cursor: 'pointer',
+                      }}
                     />
-                    <div style={{ flexGrow: 1, padding: '12px 16px', backgroundColor: '#f9fafb', border: '1px solid #d1d5db', borderRadius: '8px' }}>
-                      <span style={{ fontSize: '14px', fontFamily: 'monospace', color: '#374151' }}>{formData.color}</span>
+                    <div
+                      style={{
+                        flexGrow: 1,
+                        padding: '12px 16px',
+                        backgroundColor: '#f9fafb',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '8px',
+                      }}
+                    >
+                      <span style={{ fontSize: '14px', fontFamily: 'monospace', color: '#374151' }}>
+                        {formData.color}
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Form Actions (Buttons) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingTop: '16px' }}>
+                <div
+                  style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingTop: '16px' }}
+                >
                   <button
                     type="submit"
                     disabled={saving || !formData.name.trim()}
@@ -749,11 +817,7 @@ const ThresholdTypes = () => {
                   </button>
 
                   {isEditing && (
-                    <button
-                      type="button"
-                      onClick={resetForm}
-                      className="btn-secondary"
-                    >
+                    <button type="button" onClick={resetForm} className="btn-secondary">
                       Cancel
                     </button>
                   )}
@@ -762,7 +826,7 @@ const ThresholdTypes = () => {
             </div>
 
             {/* List Section (Right Column) */}
-            <div style={{...styles.formGroupBlock, padding: 0, overflow: 'hidden'}}>
+            <div style={{ ...styles.formGroupBlock, padding: 0, overflow: 'hidden' }}>
               <div style={{ padding: '24px', borderBottom: '1px solid #e5e7eb' }}>
                 <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#111827' }}>
                   Threshold Types List
@@ -773,36 +837,87 @@ const ThresholdTypes = () => {
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
                     <tr>
-                      <th style={{ padding: '12px 24px', textAlign: 'left', fontSize: '12px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <th
+                        style={{
+                          padding: '12px 24px',
+                          textAlign: 'left',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: '#6b7280',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
                         Name
                       </th>
-                      <th style={{ padding: '12px 24px', textAlign: 'left', fontSize: '12px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <th
+                        style={{
+                          padding: '12px 24px',
+                          textAlign: 'left',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: '#6b7280',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
                         Color
                       </th>
-                      <th style={{ padding: '12px 24px', textAlign: 'right', fontSize: '12px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <th
+                        style={{
+                          padding: '12px 24px',
+                          textAlign: 'right',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: '#6b7280',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
                         Actions
                       </th>
                     </tr>
                   </thead>
                   <tbody style={{ borderTop: '1px solid #e5e7eb' }}>
                     {thresholdTypes.map((type) => (
-                      <tr key={type.id} className="list-row" style={{ borderBottom: '1px solid #e5e7eb', transition: 'background-color 150ms ease-in-out' }}>
+                      <tr
+                        key={type.id}
+                        className="list-row"
+                        style={{
+                          borderBottom: '1px solid #e5e7eb',
+                          transition: 'background-color 150ms ease-in-out',
+                        }}
+                      >
                         <td style={{ padding: '16px 24px' }}>
-                          <span style={{ fontSize: '14px', fontWeight: 500, color: '#111827' }}>{type.name}</span>
+                          <span style={{ fontSize: '14px', fontWeight: 500, color: '#111827' }}>
+                            {type.name}
+                          </span>
                         </td>
                         <td style={{ padding: '16px 24px' }}>
                           <span
                             style={{
-                              display: 'inline-flex', alignItems: 'center', padding: '4px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: 500,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              padding: '4px 12px',
+                              borderRadius: '6px',
+                              fontSize: '14px',
+                              fontWeight: 500,
                               backgroundColor: type.color,
-                              color: getContrastColor(type.color)
+                              color: getContrastColor(type.color),
                             }}
                           >
                             {type.color}
                           </span>
                         </td>
                         <td style={{ padding: '16px 24px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'flex-end',
+                              gap: '8px',
+                            }}
+                          >
                             <button
                               onClick={() => handleEdit(type.id)}
                               className="list-action-btn edit-btn"
@@ -827,7 +942,6 @@ const ThresholdTypes = () => {
                 </table>
               </div>
             </div>
-
           </div>
         </div>
       </div>

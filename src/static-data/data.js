@@ -1,139 +1,139 @@
-import { FaHome, FaServer, FaChartLine, FaCog, FaList } from "react-icons/fa";
+import { FaHome, FaServer, FaChartLine, FaCog, FaList } from 'react-icons/fa';
 
 export const sidebarMenu = [
   {
-    title: "Home",
-    path: "/admin/home",
+    title: 'Home',
+    path: '/admin/home',
     icon: <FaHome />,
   },
   {
-    title: "Dashboard",
-    path: "/admin/dashboard",
+    title: 'Dashboard',
+    path: '/admin/dashboard',
     icon: <FaChartLine />,
   },
   {
-    title: "Reports",
+    title: 'Reports',
     icon: <FaList />,
     submenu: [
       {
-        title: "Device List",
-        path: "/admin/reports/device-list",
+        title: 'Device List',
+        path: '/admin/reports/device-list',
       },
       {
-        title: "Log",
-        path: "/admin/reports/log",
+        title: 'Log',
+        path: '/admin/reports/log',
       },
     ],
   },
   {
-    title: "Servers",
-    path: "/admin/servers",
+    title: 'Servers',
+    path: '/admin/servers',
     icon: <FaServer />,
   },
 
   {
-    title: "Settings",
+    title: 'Settings',
     icon: <FaCog />,
     submenu: [
       {
-        title: "User Management",
+        title: 'User Management',
         icon: <FaCog />,
         submenu: [
           {
-            title: "Users",
-            path: "/admin/users",
+            title: 'Users',
+            path: '/admin/users',
+          },
+          // {
+          //   title: "Register",
+          //   path: "/admin/settings/userregister",
+          // },
+          {
+            title: 'Role List',
+            path: '/admin/roles',
+          },
+          // {
+          //   title: "Create Role",
+          //   path: "/admin/roles/create",
+          // },
+          // {
+          //   title: "Permissions",
+          //   path: "/admin/permissions",
+          // },
+        ],
+      },
+      {
+        title: 'Data Center',
+        submenu: [
+          {
+            title: 'Data Center',
+            path: '/admin/settings/datacenter-show',
           },
           {
-            title: "Register",
-            path: "/admin/settings/userregister",
+            title: 'Device',
+            path: '/admin/settings/devices-list',
           },
           {
-            title: "Role List",
-            path: "/admin/roles",
+            title: 'Sensor',
+            path: '/admin/settings/sensor-lists',
           },
           {
-            title: "Create Role",
-            path: "/admin/roles/create",
+            title: 'Partner',
+            path: '/admin/settings/partner-list',
           },
           {
-            title: "Permissions",
-            path: "/admin/permissions",
+            title: 'Division',
+            path: '/admin/settings/division',
           },
         ],
       },
       {
-        title: "Data Center",
+        title: 'Configuration',
         submenu: [
           {
-            title: "Data Center",
-            path: "/admin/settings/datacenter-show",
+            title: 'Threshold Types',
+            path: '/admin/settings/threshold-types',
           },
           {
-            title: "Device",
-            path: "/admin/settings/devices-list",
+            title: 'Threshold',
+            path: '/admin/settings/threshold-values',
           },
           {
-            title: "Sensor",
-            path: "/admin/settings/sensor-lists",
+            title: 'State',
+            path: '/admin/settings/state-configs',
           },
           {
-            title: "Partner",
-            path: "/admin/settings/partner-list",
-          },
-          {
-            title: "Division",
-            path: "/admin/settings/division",
+            title: 'DO',
+            path: '/admin/settings/control-config',
           },
         ],
       },
       {
-        title: "Configuration",
+        title: 'Mappings',
         submenu: [
           {
-            title: "Threshold Types",
-            path: "/admin/settings/threshold-types",
+            title: 'Dashboard',
+            path: '/admin/settings/dashboart-tab-mappings',
           },
           {
-            title: "Threshold",
-            path: "/admin/settings/threshold-values",
+            title: 'DC User',
+            path: '/admin/settings/dc-user-mapping',
           },
           {
-            title: "State",
-            path: "/admin/settings/state-configs",
-          },
-          {
-            title: "DO",
-            path: "/admin/settings/control-config",
+            title: 'DC Partner',
+            path: '/admin/settings/dc-partner-mapping',
           },
         ],
       },
       {
-        title: "Mappings",
+        title: 'SLD',
         submenu: [
           {
-            title: "Dashboard",
-            path: "/admin/settings/dashboart-tab-mappings",
+            title: 'Upload',
+            path: '/admin/settings/svguploader',
           },
           {
-            title: "DC User",
-            path: "/admin/settings/dc-user-mapping",
-          },
-          {
-            title: "DC Partner",
-            path: "/admin/settings/dc-partner-mapping",
-          },
-        ],
-      },
-      {
-        title: "SLD",
-        submenu: [
-          {
-            title: "Upload",
-            path: "/admin/settings/svguploader",
-          },
-          {
-            title: "Preview",
-            path: "/admin/settings/svgpreviewer",
+            title: 'Preview',
+            path: '/admin/settings/svgpreviewer',
           },
         ],
       },

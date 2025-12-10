@@ -321,20 +321,20 @@
 // };
 
 // export default SensorForm;
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react'; // Import icon
-import Button from "../../components/ui/Button";
+import Button from '../../components/ui/Button';
 
 import {
-  fetchSensorList,
-  createSensorList,
-  updateSensorList,
-  fetchSensorTypeLists,
-  fetchTriggerTypeLists,
-} from "../../api/sensorListApi";
-import { fetchDataCenters } from "../../api/settings/dataCenterApi";
-import { fetchDevicesByDataCenter } from "../../api/deviceApi";
+  fetchSensorList,
+  createSensorList,
+  updateSensorList,
+  fetchSensorTypeLists,
+  fetchTriggerTypeLists,
+} from '../../api/sensorListApi';
+import { fetchDataCenters } from '../../api/settings/dataCenterApi';
+import { fetchDevicesByDataCenter } from '../../api/deviceApi';
 
 // ================================================================
 // 1. CSS FOR LAYOUT AND UI/UX MATCH
@@ -555,289 +555,293 @@ const formLayoutStyles = `
 `;
 // ================================================================
 
-
 const SensorForm = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const isEdit = !!id;
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const isEdit = !!id;
 
-  const [formData, setFormData] = useState({
-    data_center_id: "",
-    device_id: "",
-    sensor_type_list_id: "",
-    unique_id: "",
-    trigger_type_id: "",
-    sound_status: false,
-    blink_status: false,
-    sensor_name: "",
-    location: "",
-    status: true,
-    timestamp: new Date().toISOString(),
-  });
+  const [formData, setFormData] = useState({
+    data_center_id: '',
+    device_id: '',
+    sensor_type_list_id: '',
+    unique_id: '',
+    trigger_type_id: '',
+    sound_status: false,
+    blink_status: false,
+    sensor_name: '',
+    location: '',
+    status: true,
+    timestamp: new Date().toISOString(),
+  });
 
-  const [dataCenters, setDataCenters] = useState([]);
-  const [devices, setDevices] = useState([]);
-  const [sensorTypes, setSensorTypes] = useState([]);
-  const [triggerTypes, setTriggerTypes] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loadingData, setLoadingData] = useState(true);
-  const [error, setError] = useState(null);
-  
-  // Combining loading states
-  const isLoading = isSubmitting || loadingData;
+  const [dataCenters, setDataCenters] = useState([]);
+  const [devices, setDevices] = useState([]);
+  const [sensorTypes, setSensorTypes] = useState([]);
+  const [triggerTypes, setTriggerTypes] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
+  const [error, setError] = useState(null); // Combining loading states
+  const isLoading = isSubmitting || loadingData; // --- Master Data Loading Effect ---
 
-  // --- Master Data Loading Effect ---
-  useEffect(() => {
-    const loadInitialData = async () => {
-      try {
-        const [centers, sensorTypeList, triggerTypeList] = await Promise.all([
-          fetchDataCenters(),
-          fetchSensorTypeLists(),
-          fetchTriggerTypeLists(),
-        ]);
+  useEffect(() => {
+    const loadInitialData = async () => {
+      try {
+        const [centers, sensorTypeList, triggerTypeList] = await Promise.all([
+          fetchDataCenters(),
+          fetchSensorTypeLists(),
+          fetchTriggerTypeLists(),
+        ]);
 
-        setDataCenters(centers);
-        setSensorTypes(sensorTypeList);
-        setTriggerTypes(triggerTypeList);
+        setDataCenters(centers);
+        setSensorTypes(sensorTypeList);
+        setTriggerTypes(triggerTypeList);
 
-        if (isEdit) {
-          await loadSensor(centers); // Pass centers to load devices immediately
-        } else {
-            setLoadingData(false);
+        if (isEdit) {
+          await loadSensor(centers); // Pass centers to load devices immediately
+        } else {
+          setLoadingData(false);
         }
-      } catch (err) {
-        setError("Failed to load master data: " + err.message);
-        setLoadingData(false);
-      }
-    };
-
-    loadInitialData();
-  }, [id, isEdit]);
-
-    // --- Single Sensor & Devices Loading Logic ---
-    const loadSensor = async (centers) => {
-        try {
-            const sensor = await fetchSensorList(id);
-            
-            // Load devices based on the sensor's data_center_id
-            const deviceList = await fetchDevicesByDataCenter(sensor.data_center_id);
-            setDevices(deviceList);
-            
-            setFormData({
-                ...sensor,
-                data_center_id: String(sensor.data_center_id),
-                device_id: String(sensor.device_id),
-                sensor_type_list_id: String(sensor.sensor_type_list_id),
-                trigger_type_id: String(sensor.trigger_type_id),
-                sound_status: Boolean(sensor.sound_status),
-                blink_status: Boolean(sensor.blink_status),
-                status: Boolean(sensor.status),
-            });
-        } catch (err) {
-            setError("Failed to load sensor data: " + err.message);
-        } finally {
-            setLoadingData(false);
-        }
+      } catch (err) {
+        setError('Failed to load master data: ' + err.message);
+        setLoadingData(false);
+      }
     };
-    
-  // --- Devices by Data Center Effect (for manual change) ---
-  useEffect(() => {
-    const loadDevices = async () => {
-      if (!formData.data_center_id) {
-        setDevices([]);
-        return;
-      }
+
+    loadInitialData();
+  }, [id, isEdit]);
+
+  // --- Single Sensor & Devices Loading Logic ---
+  const loadSensor = async (centers) => {
+    try {
+      const sensor = await fetchSensorList(id);
+
+      // Load devices based on the sensor's data_center_id
+      const deviceList = await fetchDevicesByDataCenter(sensor.data_center_id);
+      setDevices(deviceList);
+
+      setFormData({
+        ...sensor,
+        data_center_id: String(sensor.data_center_id),
+        device_id: String(sensor.device_id),
+        sensor_type_list_id: String(sensor.sensor_type_list_id),
+        trigger_type_id: String(sensor.trigger_type_id),
+        sound_status: Boolean(sensor.sound_status),
+        blink_status: Boolean(sensor.blink_status),
+        status: Boolean(sensor.status),
+      });
+    } catch (err) {
+      setError('Failed to load sensor data: ' + err.message);
+    } finally {
+      setLoadingData(false);
+    }
+  }; // --- Devices by Data Center Effect (for manual change) ---
+
+  useEffect(() => {
+    const loadDevices = async () => {
+      if (!formData.data_center_id) {
+        setDevices([]);
+        return;
+      }
       // If we are in edit mode and the data_center_id hasn't changed, skip
       if (isEdit && String(formData.data_center_id) === String(formData.data_center_id)) return;
-      
-      try {
-        const deviceList = await fetchDevicesByDataCenter(
-          formData.data_center_id
-        );
-        setDevices(deviceList);
-        // Reset device_id if the previously selected device is no longer in the new list
-        if (!deviceList.find(d => String(d.id) === String(formData.device_id))) {
-          setFormData(prev => ({ ...prev, device_id: "" }));
-        }
-      } catch (err) {
-        setError("Failed to load devices: " + err.message);
-        setDevices([]);
-      }
-    };
 
-    // Only trigger this if data is loaded and not during initial edit load
+      try {
+        const deviceList = await fetchDevicesByDataCenter(formData.data_center_id);
+        setDevices(deviceList); // Reset device_id if the previously selected device is no longer in the new list
+        if (!deviceList.find((d) => String(d.id) === String(formData.device_id))) {
+          setFormData((prev) => ({ ...prev, device_id: '' }));
+        }
+      } catch (err) {
+        setError('Failed to load devices: ' + err.message);
+        setDevices([]);
+      }
+    }; // Only trigger this if data is loaded and not during initial edit load
+
     if (!loadingData) {
-        loadDevices();
+      loadDevices();
     }
-  }, [formData.data_center_id, loadingData, isEdit]);
+  }, [formData.data_center_id, loadingData, isEdit]);
 
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     // Special handling to reset device_id when data_center_id changes
-    let newValue = type === "checkbox" ? checked : value;
+    let newValue = type === 'checkbox' ? checked : value;
     if (name === 'data_center_id' && value !== formData.data_center_id) {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: newValue,
-            device_id: "", // Reset device when DC changes
-        }));
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: newValue,
+        device_id: '', // Reset device when DC changes
+      }));
     } else {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: newValue,
-        }));
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: newValue,
+      }));
     }
-  };
+  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     // Simple validation (required fields)
-    if (!formData.data_center_id || !formData.device_id || !formData.sensor_type_list_id || !formData.trigger_type_id || !formData.sensor_name || !formData.location) {
-        setError("Please fill out all required fields.");
-        return;
+    if (
+      !formData.data_center_id ||
+      !formData.device_id ||
+      !formData.sensor_type_list_id ||
+      !formData.trigger_type_id ||
+      !formData.sensor_name ||
+      !formData.location
+    ) {
+      setError('Please fill out all required fields.');
+      return;
     }
-    
-    setIsSubmitting(true);
-    setError(null);
-    
-    try {
-      const payload = {
-        ...formData,
-        // Convert back to number/string for API
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const payload = {
+        ...formData, // Convert back to number/string for API
         data_center_id: Number(formData.data_center_id),
         device_id: Number(formData.device_id),
         sensor_type_list_id: Number(formData.sensor_type_list_id),
         trigger_type_id: Number(formData.trigger_type_id),
-        sound_status: formData.sound_status ? 1 : 0,
-        blink_status: formData.blink_status ? 1 : 0,
-        status: formData.status ? 1 : 0,
+        sound_status: formData.sound_status ? 1 : 0,
+        blink_status: formData.blink_status ? 1 : 0,
+        status: formData.status ? 1 : 0,
         // Ensure unique_id is only included if it exists and is needed by the API for update
-        unique_id: formData.unique_id || undefined, 
+        unique_id: formData.unique_id || undefined,
         timestamp: formData.timestamp,
-      };
+      };
 
-      if (isEdit) {
-        await updateSensorList(id, payload);
-      } else {
-        await createSensorList(payload);
-      }
-      navigate("/admin/settings/sensor-lists");
-    } catch (err) {
-      setError("Save failed: " + err.message);
-    } finally {
-        setIsSubmitting(false);
+      if (isEdit) {
+        await updateSensorList(id, payload);
+      } else {
+        await createSensorList(payload);
+      }
+      navigate('/admin/settings/sensor-lists');
+    } catch (err) {
+      setError('Save failed: ' + err.message);
+    } finally {
+      setIsSubmitting(false);
     }
-  };
-
-  const handleCancel = () => {
-    navigate("/admin/settings/sensor-lists");
   };
-  
-  if (loadingData) return <div className="text-center p-4">Loading Form Data...</div>;
-  
-  const formTitle = isEdit ? "Edit Sensor Details" : "New Sensor Registration";
-  const formSubtitle = isEdit ? "Modify the sensor and its device assignments." : "Register a new sensor and assign it to a device.";
 
-  return (
+  const handleCancel = () => {
+    navigate('/admin/settings/sensor-lists');
+  };
+
+  if (loadingData) return <div className="text-center p-4">Loading Form Data...</div>;
+
+  const formTitle = isEdit ? 'Edit Sensor Details' : 'New Sensor Registration';
+  const formSubtitle = isEdit
+    ? 'Modify the sensor and its device assignments.'
+    : 'Register a new sensor and assign it to a device.';
+
+  return (
     <>
-        <style>{buttonStyles}</style>
-        <style>{formLayoutStyles}</style>
-        
-        <div className="form-container">
-            {/* ================================================================
+      <style>{buttonStyles}</style>
+      <style>{formLayoutStyles}</style>
+
+      <div className="form-container">
+        {/* ================================================================
                 HEADER SECTION
                 ================================================================ */}
-            <header className="form-header">
-                <div className="form-title-group">
-                    <h1>
-                        <Button
-                            type="button"
-                            variant="ghost" 
-                            leftIcon={ArrowLeft}
-                            onClick={handleCancel}
-                            className="header-back-button"
-                            aria-label="Back to Sensor Lists"
-                        >
-                            {/* Empty children */}
-                        </Button>
-                        {formTitle}
-                    </h1>
-                    <p>{formSubtitle}</p>
-                </div>
-            </header>
+        <header className="form-header">
+          <div className="form-title-group">
+            <h1>
+              <Button
+                type="button"
+                variant="ghost"
+                leftIcon={ArrowLeft}
+                onClick={handleCancel}
+                className="header-back-button"
+                aria-label="Back to Sensor Lists"
+              >
+                {/* Empty children */}
+              </Button>
+              {formTitle}
+            </h1>
+            <p>{formSubtitle}</p>
+          </div>
+        </header>
 
-            {error && <div className="alert-danger">{error}</div>}
+        {error && <div className="alert-danger">{error}</div>}
 
-            {/* ================================================================
+        {/* ================================================================
                 FORM (Grid Layout)
                 ================================================================ */}
-            <form onSubmit={handleSubmit}>
-                <div className="form-grid">
-                    
-                    {/* Column 1 */}
-                    <div className="column-fields">
-                        <div className="form-group">
-                            <label htmlFor="data_center_id">Data Center *</label>
-                            <select
-                                id="data_center_id"
-                                className="form-select"
-                                name="data_center_id"
-                                value={formData.data_center_id}
-                                onChange={handleChange}
-                                required>
-                                <option value=''>Select Data Center</option>
-                                {dataCenters.map((center) => (
-                                    <option key={center.id} value={center.id}>
-                                        {center.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-grid">
+            {/* Column 1 */}
+            <div className="column-fields">
+              <div className="form-group">
+                <label htmlFor="data_center_id">Data Center *</label>
+                <select
+                  id="data_center_id"
+                  className="form-select"
+                  name="data_center_id"
+                  value={formData.data_center_id}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Data Center</option>
+                  {dataCenters.map((center) => (
+                    <option key={center.id} value={center.id}>
+                      {center.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-                        <div className="form-group">
-                            <label htmlFor="device_id">Device *</label>
-                            <select
-                                id="device_id"
-                                className="form-select"
-                                name="device_id"
-                                value={formData.device_id}
-                                onChange={handleChange}
-                                required
-                                disabled={!formData.data_center_id || devices.length === 0}>
-                                <option value=''>
-                                    {formData.data_center_id ? `Select Device (${devices.length} available)` : 'Select Data Center first'}
-                                </option>
-                                {devices.map((device) => (
-                                    <option key={device.id} value={device.id}>
-                                        {device.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+              <div className="form-group">
+                <label htmlFor="device_id">Device *</label>
+                <select
+                  id="device_id"
+                  className="form-select"
+                  name="device_id"
+                  value={formData.device_id}
+                  onChange={handleChange}
+                  required
+                  disabled={!formData.data_center_id || devices.length === 0}
+                >
+                  <option value="">
+                    {formData.data_center_id
+                      ? `Select Device (${devices.length} available)`
+                      : 'Select Data Center first'}
+                  </option>
+                  {devices.map((device) => (
+                    <option key={device.id} value={device.id}>
+                      {device.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-                        <div className="form-group">
-                            <label htmlFor="sensor_type_list_id">Sensor Type *</label>
-                            <select
-                                id="sensor_type_list_id"
-                                className="form-select"
-                                name="sensor_type_list_id"
-                                value={formData.sensor_type_list_id}
-                                onChange={handleChange}
-                                required
-                                disabled={sensorTypes.length === 0}>
-                                <option value=''>Select Sensor Type</option>
-                                {sensorTypes.map((type) => (
-                                    <option key={type.id} value={type.id}>
-                                        {type.name || `Type ${type.id}`}
-                                    </option>
-                                ))}
-                            </select>
-                            {sensorTypes.length === 0 && (<div className='text-danger small'>No sensor types available</div>)}
-                        </div>
+              <div className="form-group">
+                <label htmlFor="sensor_type_list_id">Sensor Type *</label>
+                <select
+                  id="sensor_type_list_id"
+                  className="form-select"
+                  name="sensor_type_list_id"
+                  value={formData.sensor_type_list_id}
+                  onChange={handleChange}
+                  required
+                  disabled={sensorTypes.length === 0}
+                >
+                  <option value="">Select Sensor Type</option>
+                  {sensorTypes.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.name || `Type ${type.id}`}
+                    </option>
+                  ))}
+                </select>
+                {sensorTypes.length === 0 && (
+                  <div className="text-danger small">No sensor types available</div>
+                )}
+              </div>
 
-                        <div className="form-group">
+              {/* <div className="form-group">
                             <label htmlFor="unique_id">Unique ID (Read-only)</label>
                             <input
                                 type='text'
@@ -847,123 +851,126 @@ const SensorForm = () => {
                                 value={formData.unique_id || "Will be auto-generated"}
                                 disabled
                             />
-                        </div>
-                    </div>
+                        </div> */}
+            </div>
 
-                    {/* Column 2 */}
-                    <div className="column-fields">
-                        <div className="form-group">
-                            <label htmlFor="trigger_type_id">Trigger Type *</label>
-                            <select
-                                id="trigger_type_id"
-                                className="form-select"
-                                name="trigger_type_id"
-                                value={formData.trigger_type_id}
-                                onChange={handleChange}
-                                required
-                                disabled={triggerTypes.length === 0}>
-                                <option value=''>Select Trigger Type</option>
-                                {triggerTypes.map((type) => (
-                                    <option key={type.id} value={type.id}>
-                                        {type.name || `Type ${type.id}`}
-                                    </option>
-                                ))}
-                            </select>
-                            {triggerTypes.length === 0 && (<div className='text-danger small'>No trigger types available</div>)}
-                        </div>
-                        
-                        <div className="form-group">
-                            <label htmlFor="sensor_name">Sensor Name *</label>
-                            <input
-                                type='text'
-                                id="sensor_name"
-                                className='form-control'
-                                name='sensor_name'
-                                value={formData.sensor_name}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
+            {/* Column 2 */}
+            <div className="column-fields">
+              <div className="form-group">
+                <label htmlFor="trigger_type_id">Trigger Type *</label>
+                <select
+                  id="trigger_type_id"
+                  className="form-select"
+                  name="trigger_type_id"
+                  value={formData.trigger_type_id}
+                  onChange={handleChange}
+                  required
+                  disabled={triggerTypes.length === 0}
+                >
+                  <option value="">Select Trigger Type</option>
+                  {triggerTypes.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.name || `Type ${type.id}`}
+                    </option>
+                  ))}
+                </select>
+                {triggerTypes.length === 0 && (
+                  <div className="text-danger small">No trigger types available</div>
+                )}
+              </div>
 
-                        <div className="form-group">
-                            <label htmlFor="location">Location *</label>
-                            <input
-                                type='text'
-                                id="location"
-                                className='form-control'
-                                name='location'
-                                value={formData.location}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                        
-                        {/* Checkboxes grouped into one field area */}
-                        <div className='checkbox-field-group'>
-                            <label>Alert & Status Settings</label>
+              <div className="form-group">
+                <label htmlFor="sensor_name">Sensor Name *</label>
+                <input
+                  type="text"
+                  id="sensor_name"
+                  className="form-control"
+                  name="sensor_name"
+                  value={formData.sensor_name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-                            <div className='checkbox-item'>
-                                <input
-                                    type='checkbox'
-                                    id='sound_status'
-                                    name='sound_status'
-                                    checked={formData.sound_status}
-                                    onChange={handleChange}
-                                />
-                                <label htmlFor='sound_status'>Enable Sound Alert</label>
-                            </div>
+              <div className="form-group">
+                <label htmlFor="location">Location *</label>
+                <input
+                  type="text"
+                  id="location"
+                  className="form-control"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-                            <div className='checkbox-item'>
-                                <input
-                                    type='checkbox'
-                                    id='blink_status'
-                                    name='blink_status'
-                                    checked={formData.blink_status}
-                                    onChange={handleChange}
-                                />
-                                <label htmlFor='blink_status'>Enable Blink Alert</label>
-                            </div>
+              {/* Checkboxes grouped into one field area */}
+              <div className="checkbox-field-group">
+                <label>Alert & Status Settings</label>
 
-                            <div className='checkbox-item'>
-                                <input
-                                    type='checkbox'
-                                    id='status'
-                                    name='status'
-                                    checked={formData.status}
-                                    onChange={handleChange}
-                                />
-                                <label htmlFor='status'>Active Status</label>
-                            </div>
-                        </div>
-                    </div>
+                <div className="checkbox-item">
+                  <input
+                    type="checkbox"
+                    id="sound_status"
+                    name="sound_status"
+                    checked={formData.sound_status}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="sound_status">Enable Sound Alert</label>
+                </div>
 
-                    {/* ================================================================
+                <div className="checkbox-item">
+                  <input
+                    type="checkbox"
+                    id="blink_status"
+                    name="blink_status"
+                    checked={formData.blink_status}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="blink_status">Enable Blink Alert</label>
+                </div>
+
+                <div className="checkbox-item">
+                  <input
+                    type="checkbox"
+                    id="status"
+                    name="status"
+                    checked={formData.status}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="status">Active Status</label>
+                </div>
+              </div>
+            </div>
+
+            {/* ================================================================
                         ACTIONS FOOTER (Uses new Button component)
                         ================================================================ */}
-                    <div className="form-actions">
-                        <Button
-                            type="button"
-                            intent="secondary"
-                            onClick={handleCancel}
-                            disabled={isSubmitting}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            type="submit"
-                            intent="primary"
-                            loading={isSubmitting}
-                            loadingText={isEdit ? 'Updating Sensor...' : 'Saving Sensor...'}
-                            disabled={isSubmitting || loadingData}
-                        >
-                            {isEdit ? 'Update Sensor' : 'Save Sensor'}
-                        </Button>
-                    </div>
-                </div>
-            </form>
-        </div>
+            <div className="form-actions">
+              <Button
+                type="button"
+                intent="secondary"
+                onClick={handleCancel}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                intent="primary"
+                loading={isSubmitting}
+                loadingText={isEdit ? 'Updating Sensor...' : 'Saving Sensor...'}
+                disabled={isSubmitting || loadingData}
+              >
+                {isEdit ? 'Update Sensor' : 'Save Sensor'}
+              </Button>
+            </div>
+          </div>
+        </form>
+      </div>
     </>
-  );
+  );
 };
 
 export default SensorForm;

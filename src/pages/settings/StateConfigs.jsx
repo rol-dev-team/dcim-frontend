@@ -48,7 +48,7 @@
 //           fetchStateConfigs(),
 //           fetchDataCenters()
 //         ]);
-        
+
 //         const fetchedConfigs = Array.isArray(configsResponse) ? configsResponse : [];
 //         setAllStateConfigs(fetchedConfigs);
 //         setTotalPages(Math.ceil(fetchedConfigs.length / configsPerPage));
@@ -56,11 +56,11 @@
 
 //         setDataCenters(centers);
 //         setLoading(false);
-        
+
 //         if (isEditing && currentConfig) {
 //           const deviceResponse = await fetchDevicesByDataCenter(currentConfig.sensor?.device?.data_center_id);
 //           setDevices(deviceResponse);
-          
+
 //           // Filter sensors with trigger_type_id = 2 when editing
 //           const allSensors = await fetchSensorsByDevice(currentConfig.sensor?.device_id);
 //           const filteredSensors = allSensors.filter(sensor => sensor.trigger_type_id === 2);
@@ -90,7 +90,7 @@
 //       device_id: '',
 //       sensor_id: ''
 //     });
-    
+
 //     if (dataCenterId) {
 //       try {
 //         const devices = await fetchDevicesByDataCenter(dataCenterId);
@@ -112,7 +112,7 @@
 //       device_id: deviceId,
 //       sensor_id: ''
 //     });
-    
+
 //     if (deviceId) {
 //       try {
 //         // Fetch all sensors and filter by trigger_type_id = 2
@@ -170,7 +170,7 @@
 //         color: config.color || '#ffffff'
 //       });
 //       setIsEditing(true);
-      
+
 //       // Ensure devices and sensors are loaded correctly for the form when editing
 //       if (config.sensor?.device?.data_center_id) {
 //         const deviceResponse = await fetchDevicesByDataCenter(config.sensor.device.data_center_id);
@@ -335,7 +335,7 @@
 //                 disabled={!formData.device_id || sensors.length === 0}
 //               >
 //                 <option value="">
-//                   {!formData.device_id ? 'Select device first' : 
+//                   {!formData.device_id ? 'Select device first' :
 //                    sensors.length === 0 ? 'No sensors with trigger type State available' : 'Select Sensor'}
 //                 </option>
 //                 {sensors.map((sensor) => (
@@ -417,7 +417,7 @@
 //                 />
 //               </div>
 //             </div>
-            
+
 //             <button type="submit" className="btn btn-primary">
 //               {isEditing ? 'Update' : 'Save'}
 //             </button>
@@ -428,7 +428,7 @@
 //             )}
 //           </form>
 //         </div>
-        
+
 //         <div className="col-md-6">
 //           <div className="d-flex justify-content-between align-items-center mb-3">
 //             <h2>State Configurations</h2>
@@ -457,7 +457,7 @@
 //                   currentStateConfigs.map((config, index) => (
 //                     <tr key={config.id}>
 //                       {/* Calculate sequential number for the current page */}
-//                       <td>{(currentPage - 1) * configsPerPage + index + 1}</td> 
+//                       <td>{(currentPage - 1) * configsPerPage + index + 1}</td>
 //                       <td>{config.sensor?.device?.data_center?.name || 'N/A'}</td>
 //                       <td>{config.sensor?.device?.name || 'N/A'}</td>
 //                       <td>{config.sensor?.name || `Sensor ${config.sensor_id}`}</td>
@@ -479,8 +479,6 @@
 //                           </div>
 //                       </td>
 
-
-
 //                     <td>
 //                       <div className="d-flex gap-2">
 //   <CommonButton
@@ -495,9 +493,6 @@
 //   </div>
 // </td>
 
-
-
-                      
 //                     </tr>
 //                   ))
 //                 ) : (
@@ -541,13 +536,13 @@
 
 // export default StateConfigs;
 import React, { useState, useEffect } from 'react';
-import { Edit2, Trash2, Download } from 'lucide-react'; 
+import { Edit2, Trash2, Download } from 'lucide-react';
 import {
   fetchStateConfigs,
   fetchStateConfig,
   createStateConfig,
   updateStateConfig,
-  deleteStateConfig
+  deleteStateConfig,
 } from '../../api/stateConfigApi';
 import { fetchSensorsByDevice } from '../../api/sensorListApi';
 import { fetchDataCenters } from '../../api/settings/dataCenterApi';
@@ -564,63 +559,63 @@ import { saveAs } from 'file-saver';
 const styles = {
   // Layout
   pageContainer: {
-    minHeight: "100vh",
-    backgroundColor: "#f8fafc",
-    padding: "3rem 4rem",
+    minHeight: '100vh',
+    backgroundColor: '#f8fafc',
+    padding: '3rem 4rem',
     boxSizing: 'border-box',
   },
   contentWrapper: {
-    width: "100%",
+    width: '100%',
   },
   headerSection: {
-    marginBottom: "2rem",
+    marginBottom: '2rem',
     textAlign: 'left',
     paddingBottom: '1rem',
     borderBottom: '1px solid #e5e7eb',
   },
   heading: {
-    fontSize: "2rem",
+    fontSize: '2rem',
     fontWeight: 600,
-    color: "#111827",
-    marginBottom: "0.25rem",
+    color: '#111827',
+    marginBottom: '0.25rem',
     letterSpacing: '-0.02em',
   },
   description: {
-    fontSize: "1rem",
-    color: "#6b7280",
+    fontSize: '1rem',
+    color: '#6b7280',
     lineHeight: 1.5,
   },
 
   // Alerts
   alert: {
-    padding: "0.5rem 1rem",
-    borderRadius: "0.5rem",
-    fontSize: "0.9rem",
-    marginBottom: "1.5rem",
+    padding: '0.5rem 1rem',
+    borderRadius: '0.5rem',
+    fontSize: '0.9rem',
+    marginBottom: '1.5rem',
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
   },
   alertError: {
-    backgroundColor: "#fef2f2",
-    color: "#b91c1c",
-    border: "1px solid #fecaca",
+    backgroundColor: '#fef2f2',
+    color: '#b91c1c',
+    border: '1px solid #fecaca',
   },
   alertSuccess: {
-    backgroundColor: "#f0fdf4",
-    color: "#047857",
-    border: "1px solid #bbf7d0",
+    backgroundColor: '#f0fdf4',
+    color: '#047857',
+    border: '1px solid #bbf7d0',
   },
 
   // Form Group Block (Used for both Form and List container)
   formGroupBlock: {
-    padding: "32px",
-    backgroundColor: "#ffffff",
-    border: "1px solid #e5e7eb",
-    borderRadius: "0.5rem",
+    padding: '32px',
+    backgroundColor: '#ffffff',
+    border: '1px solid #e5e7eb',
+    borderRadius: '0.5rem',
     boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
   },
-  
+
   // Form elements (inline styles for dynamic parts)
   inputStyle: {
     width: '100%',
@@ -658,7 +653,7 @@ const StateConfigs = () => {
     name: '',
     attache_sound: '',
     url: '',
-    color: '#ffffff'
+    color: '#ffffff',
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -681,11 +676,11 @@ const StateConfigs = () => {
       }
       if (deviceId) {
         const allSensors = await fetchSensorsByDevice(deviceId);
-        const filteredSensors = allSensors.filter(sensor => sensor.trigger_type_id === 2);
+        const filteredSensors = allSensors.filter((sensor) => sensor.trigger_type_id === 2);
         setSensors(filteredSensors);
       }
     } catch (err) {
-      console.error("Error fetching dependent data for edit:", err);
+      console.error('Error fetching dependent data for edit:', err);
     }
   };
 
@@ -694,18 +689,17 @@ const StateConfigs = () => {
       try {
         const [configsResponse, centers] = await Promise.all([
           fetchStateConfigs(),
-          fetchDataCenters()
+          fetchDataCenters(),
         ]);
-        
+
         const fetchedConfigs = Array.isArray(configsResponse) ? configsResponse : [];
         setAllStateConfigs(fetchedConfigs);
         setTotalPages(Math.ceil(fetchedConfigs.length / configsPerPage));
 
         setDataCenters(centers);
         setLoading(false);
-        
       } catch (err) {
-        setError(err.message || "Failed to load initial data.");
+        setError(err.message || 'Failed to load initial data.');
         setLoading(false);
       }
     };
@@ -721,7 +715,6 @@ const StateConfigs = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditing, currentConfig]);
 
-
   // Effect to update currentStateConfigs when currentPage or allStateConfigs changes
   useEffect(() => {
     const indexOfLastConfig = currentPage * configsPerPage;
@@ -735,9 +728,9 @@ const StateConfigs = () => {
       ...formData,
       data_center_id: dataCenterId,
       device_id: '',
-      sensor_id: ''
+      sensor_id: '',
     });
-    
+
     setDevices([]);
     setSensors([]);
 
@@ -756,16 +749,16 @@ const StateConfigs = () => {
     setFormData({
       ...formData,
       device_id: deviceId,
-      sensor_id: ''
+      sensor_id: '',
     });
-    
+
     setSensors([]);
 
     if (deviceId) {
       try {
         const allSensors = await fetchSensorsByDevice(deviceId);
         // FUNCTIONALITY REMAINS: Filter by trigger_type_id = 2 (State)
-        const filteredSensors = allSensors.filter(sensor => sensor.trigger_type_id === 2);
+        const filteredSensors = allSensors.filter((sensor) => sensor.trigger_type_id === 2);
         setSensors(filteredSensors);
       } catch (err) {
         setError(err.message || 'Failed to fetch sensors.');
@@ -777,7 +770,7 @@ const StateConfigs = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -786,18 +779,20 @@ const StateConfigs = () => {
     setError(null);
     setSuccess(null);
     try {
-      const message = isEditing ? 'State configuration updated successfully!' : 'State configuration created successfully!';
+      const message = isEditing
+        ? 'State configuration updated successfully!'
+        : 'State configuration created successfully!';
 
       if (isEditing && currentConfig) {
         await updateStateConfig(currentConfig.id, formData);
       } else {
         await createStateConfig(formData);
       }
-      
+
       const updatedConfigs = await fetchStateConfigs();
       setAllStateConfigs(updatedConfigs);
       setTotalPages(Math.ceil(updatedConfigs.length / configsPerPage));
-      setCurrentPage(1); 
+      setCurrentPage(1);
 
       resetForm();
       setSuccess(message);
@@ -819,14 +814,13 @@ const StateConfigs = () => {
         name: config.name,
         attache_sound: config.attache_sound || '',
         url: config.url || '',
-        color: config.color || '#ffffff'
+        color: config.color || '#ffffff',
       });
       setIsEditing(true);
       setError(null);
 
       // Reload devices and sensors specifically for the form on edit
       await fetchDependentData(config);
-
     } catch (err) {
       setError(err.message || 'Failed to fetch configuration for editing.');
     }
@@ -842,7 +836,7 @@ const StateConfigs = () => {
           onClick: async () => {
             try {
               await deleteStateConfig(id);
-              const updatedAllStateConfigs = allStateConfigs.filter(config => config.id !== id);
+              const updatedAllStateConfigs = allStateConfigs.filter((config) => config.id !== id);
               setAllStateConfigs(updatedAllStateConfigs);
 
               const newTotalPages = Math.ceil(updatedAllStateConfigs.length / configsPerPage);
@@ -850,10 +844,14 @@ const StateConfigs = () => {
 
               if (currentPage > newTotalPages && currentPage > 1) {
                 setCurrentPage(newTotalPages);
-              } else if (currentStateConfigs.length === 1 && currentPage > 1 && updatedAllStateConfigs.length % configsPerPage === 0) {
-                 setCurrentPage(prev => prev - 1);
+              } else if (
+                currentStateConfigs.length === 1 &&
+                currentPage > 1 &&
+                updatedAllStateConfigs.length % configsPerPage === 0
+              ) {
+                setCurrentPage((prev) => prev - 1);
               }
-              setSuccess("State configuration deleted successfully!");
+              setSuccess('State configuration deleted successfully!');
               setTimeout(() => setSuccess(null), 3000);
             } catch (err) {
               setError(err.message || 'Failed to delete state configuration.');
@@ -874,7 +872,7 @@ const StateConfigs = () => {
       name: '',
       attache_sound: '',
       url: '',
-      color: '#ffffff'
+      color: '#ffffff',
     });
     setIsEditing(false);
     setCurrentConfig(null);
@@ -905,24 +903,32 @@ const StateConfigs = () => {
     // Create a worksheet
     const ws = XLSX.utils.json_to_sheet(dataToExport);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "StateConfigs");
+    XLSX.utils.book_append_sheet(wb, ws, 'StateConfigs');
     const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
 
     // Save the file
     try {
       saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'state_configurations.xlsx');
     } catch (e) {
-      console.error("Error saving file:", e);
-      setError("Failed to export Excel file.");
+      console.error('Error saving file:', e);
+      setError('Failed to export Excel file.');
     }
   };
   // --- End Export Functionality ---
 
-  if (loading) return (
-    <div style={{ ...styles.pageContainer, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ color: '#6b7280' }}>Loading...</div>
-    </div>
-  );
+  if (loading)
+    return (
+      <div
+        style={{
+          ...styles.pageContainer,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ color: '#6b7280' }}>Loading...</div>
+      </div>
+    );
 
   return (
     <>
@@ -1070,26 +1076,44 @@ const StateConfigs = () => {
 
       <div style={styles.pageContainer}>
         <div style={styles.contentWrapper}>
-          
           {/* Header Section (Full-width) */}
           <header style={styles.headerSection}>
             <h1 style={styles.heading}>State Configurations</h1>
             <p style={styles.description}>
-              Define states (name, color, sound) corresponding to specific sensor values for State-type sensors.
+              Define states (name, color, sound) corresponding to specific sensor values for
+              State-type sensors.
             </p>
           </header>
 
           {/* Alerts positioned before the grid */}
           {error && (
             <div style={{ ...styles.alert, ...styles.alertError }}>
-              <svg style={{ width: '20px', height: '20px' }} fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-12a1 1 0 102 0V7a1 1 0 10-2 0V6zm0 4a1 1 0 102 0v4a1 1 0 10-2 0v-4z" clipRule="evenodd" /></svg>
+              <svg
+                style={{ width: '20px', height: '20px' }}
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-12a1 1 0 102 0V7a1 1 0 10-2 0V6zm0 4a1 1 0 102 0v4a1 1 0 10-2 0v-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
               <span style={{ fontSize: '14px', fontWeight: 500 }}>Error: {error}</span>
             </div>
           )}
           {success && (
             <div style={{ ...styles.alert, ...styles.alertSuccess }}>
-              <svg style={{ width: '20px', height: '20px' }} fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              <svg
+                style={{ width: '20px', height: '20px' }}
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
               </svg>
               <span style={{ fontSize: '14px', fontWeight: 500 }}>{success}</span>
             </div>
@@ -1097,17 +1121,28 @@ const StateConfigs = () => {
 
           {/* TWO-COLUMN CONTENT GRID */}
           <div className="grid-container">
-
             {/* 1st Section: State Config Form (Left Column) */}
             <div style={styles.formGroupBlock}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#111827', marginBottom: '24px' }}>
+              <h2
+                style={{
+                  fontSize: '1.25rem',
+                  fontWeight: 600,
+                  color: '#111827',
+                  marginBottom: '24px',
+                }}
+              >
                 {isEditing ? 'Edit State Configuration' : 'Add New State Configuration'}
               </h2>
 
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <form
+                onSubmit={handleSubmit}
+                style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+              >
                 {/* Data Center */}
                 <div>
-                  <label htmlFor="data_center_id" style={styles.labelStyle}>Data Center</label>
+                  <label htmlFor="data_center_id" style={styles.labelStyle}>
+                    Data Center
+                  </label>
                   <select
                     id="data_center_id"
                     className="input-style"
@@ -1128,7 +1163,9 @@ const StateConfigs = () => {
 
                 {/* Device */}
                 <div>
-                  <label htmlFor="device_id" style={styles.labelStyle}>Device</label>
+                  <label htmlFor="device_id" style={styles.labelStyle}>
+                    Device
+                  </label>
                   <select
                     id="device_id"
                     className="input-style"
@@ -1150,7 +1187,9 @@ const StateConfigs = () => {
 
                 {/* Sensor (Trigger Type State) */}
                 <div>
-                  <label htmlFor="sensor_id" style={styles.labelStyle}>Select Sensor (Trigger Type State)</label>
+                  <label htmlFor="sensor_id" style={styles.labelStyle}>
+                    Select Sensor (Trigger Type State)
+                  </label>
                   <select
                     id="sensor_id"
                     className="input-style"
@@ -1175,7 +1214,7 @@ const StateConfigs = () => {
                     ))}
                   </select>
                   {formData.device_id && sensors.length === 0 && (
-                    <div style={{color: '#dc2626', fontSize: '12px', marginTop: '4px'}}>
+                    <div style={{ color: '#dc2626', fontSize: '12px', marginTop: '4px' }}>
                       No sensors with trigger type State found for this device
                     </div>
                   )}
@@ -1183,7 +1222,9 @@ const StateConfigs = () => {
 
                 {/* Value */}
                 <div>
-                  <label htmlFor="value" style={styles.labelStyle}>Value</label>
+                  <label htmlFor="value" style={styles.labelStyle}>
+                    Value
+                  </label>
                   <input
                     id="value"
                     type="number"
@@ -1198,7 +1239,9 @@ const StateConfigs = () => {
 
                 {/* Name */}
                 <div>
-                  <label htmlFor="name" style={styles.labelStyle}>Name</label>
+                  <label htmlFor="name" style={styles.labelStyle}>
+                    Name
+                  </label>
                   <input
                     id="name"
                     type="text"
@@ -1212,8 +1255,10 @@ const StateConfigs = () => {
                 </div>
 
                 {/* Attached Sound */}
-                <div>
-                  <label htmlFor="attache_sound" style={styles.labelStyle}>Attached Sound</label>
+                {/* <div>
+                  <label htmlFor="attache_sound" style={styles.labelStyle}>
+                    Attached Sound
+                  </label>
                   <input
                     id="attache_sound"
                     type="text"
@@ -1224,10 +1269,10 @@ const StateConfigs = () => {
                     onChange={handleInputChange}
                     placeholder="Sound file path or URL"
                   />
-                </div>
+                </div> */}
 
                 {/* URL */}
-                <div>
+                {/* <div>
                   <label htmlFor="url" style={styles.labelStyle}>URL</label>
                   <input
                     id="url"
@@ -1239,11 +1284,13 @@ const StateConfigs = () => {
                     onChange={handleInputChange}
                     placeholder="Optional URL"
                   />
-                </div>
+                </div> */}
 
                 {/* Color */}
                 <div>
-                  <label htmlFor="color" style={styles.labelStyle}>Color</label>
+                  <label htmlFor="color" style={styles.labelStyle}>
+                    Color
+                  </label>
                   <div className="color-input-group">
                     <input
                       type="color"
@@ -1264,16 +1311,14 @@ const StateConfigs = () => {
                 </div>
 
                 {/* Form Actions (Buttons) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingTop: '8px' }}>
+                <div
+                  style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingTop: '8px' }}
+                >
                   <button type="submit" className="btn-primary-style" style={{ flexGrow: 1 }}>
                     {isEditing ? 'Update' : 'Save'}
                   </button>
                   {isEditing && (
-                    <button
-                      type="button"
-                      className="btn-secondary-style"
-                      onClick={resetForm}
-                    >
+                    <button type="button" className="btn-secondary-style" onClick={resetForm}>
                       Cancel
                     </button>
                   )}
@@ -1282,18 +1327,26 @@ const StateConfigs = () => {
             </div>
 
             {/* 2nd Section: State Config List (Right Column) */}
-            <div style={{...styles.formGroupBlock, padding: 0, overflow: 'hidden'}}>
-              <div style={{ padding: '24px', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ ...styles.formGroupBlock, padding: 0, overflow: 'hidden' }}>
+              <div
+                style={{
+                  padding: '24px',
+                  borderBottom: '1px solid #e5e7eb',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
                 <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#111827' }}>
                   State Configurations List
                 </h2>
-                <button 
-                  className="btn-secondary-style" 
+                <button
+                  className="btn-secondary-style"
                   onClick={handleExport}
-                  style={{padding: '8px 12px'}} 
+                  style={{ padding: '8px 12px' }}
                 >
-                  <div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
-                    <Download style={{width: '16px', height: '16px'}}/>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <Download style={{ width: '16px', height: '16px' }} />
                     Export
                   </div>
                 </button>
@@ -1303,25 +1356,95 @@ const StateConfigs = () => {
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
                     <tr>
-                      <th style={{ padding: '12px 24px', textAlign: 'left', fontSize: '12px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <th
+                        style={{
+                          padding: '12px 24px',
+                          textAlign: 'left',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: '#6b7280',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
                         No
                       </th>
-                      <th style={{ padding: '12px 24px', textAlign: 'left', fontSize: '12px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <th
+                        style={{
+                          padding: '12px 24px',
+                          textAlign: 'left',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: '#6b7280',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
                         Data Center
                       </th>
-                      <th style={{ padding: '12px 24px', textAlign: 'left', fontSize: '12px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <th
+                        style={{
+                          padding: '12px 24px',
+                          textAlign: 'left',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: '#6b7280',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
                         Sensor
                       </th>
-                      <th style={{ padding: '12px 24px', textAlign: 'left', fontSize: '12px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <th
+                        style={{
+                          padding: '12px 24px',
+                          textAlign: 'left',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: '#6b7280',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
                         Value
                       </th>
-                      <th style={{ padding: '12px 24px', textAlign: 'left', fontSize: '12px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <th
+                        style={{
+                          padding: '12px 24px',
+                          textAlign: 'left',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: '#6b7280',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
                         Name
                       </th>
-                      <th style={{ padding: '12px 24px', textAlign: 'left', fontSize: '12px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <th
+                        style={{
+                          padding: '12px 24px',
+                          textAlign: 'left',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: '#6b7280',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
                         Color
                       </th>
-                      <th style={{ padding: '12px 24px', textAlign: 'right', fontSize: '12px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <th
+                        style={{
+                          padding: '12px 24px',
+                          textAlign: 'right',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: '#6b7280',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
                         Actions
                       </th>
                     </tr>
@@ -1329,29 +1452,53 @@ const StateConfigs = () => {
                   <tbody style={{ borderTop: '1px solid #e5e7eb' }}>
                     {currentStateConfigs.length > 0 ? (
                       currentStateConfigs.map((config, index) => (
-                        <tr key={config.id} className="list-row" style={{ borderBottom: '1px solid #e5e7eb', transition: 'background-color 150ms ease-in-out' }}>
-                          <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>{(currentPage - 1) * configsPerPage + index + 1}</td>
+                        <tr
+                          key={config.id}
+                          className="list-row"
+                          style={{
+                            borderBottom: '1px solid #e5e7eb',
+                            transition: 'background-color 150ms ease-in-out',
+                          }}
+                        >
+                          <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>
+                            {(currentPage - 1) * configsPerPage + index + 1}
+                          </td>
                           {/* Data Center path from the original table: config.sensor?.device?.data_center?.name */}
-                          <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>{config.sensor?.device?.data_center?.name || 'N/A'}</td>
-                          <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>{config.sensor?.name || `Sensor ${config.sensor_id}`}</td>
-                          <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>{config.value}</td>
-                          <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>{config.name}</td>
+                          <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>
+                            {config.sensor?.device?.data_center?.name || 'N/A'}
+                          </td>
+                          <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>
+                            {config.sensor?.name || `Sensor ${config.sensor_id}`}
+                          </td>
+                          <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>
+                            {config.value}
+                          </td>
+                          <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>
+                            {config.name}
+                          </td>
                           <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                               <div
                                 style={{
-                                    width: '20px',
-                                    height: '20px',
-                                    backgroundColor: config.color,
-                                    border: '1px solid #d1d5db',
-                                    borderRadius: '4px'
+                                  width: '20px',
+                                  height: '20px',
+                                  backgroundColor: config.color,
+                                  border: '1px solid #d1d5db',
+                                  borderRadius: '4px',
                                 }}
                               ></div>
-                              <span style={{color: '#6b7280'}}>{config.color}</span>
+                              <span style={{ color: '#6b7280' }}>{config.color}</span>
                             </div>
                           </td>
                           <td style={{ padding: '16px 24px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-end',
+                                gap: '8px',
+                              }}
+                            >
                               <button
                                 onClick={() => handleEdit(config.id)}
                                 className="list-action-btn edit-btn"
@@ -1374,7 +1521,10 @@ const StateConfigs = () => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="7" style={{ padding: '16px 24px', textAlign: 'center', color: '#6b7280' }}>
+                        <td
+                          colSpan="7"
+                          style={{ padding: '16px 24px', textAlign: 'center', color: '#6b7280' }}
+                        >
                           No state configurations found.
                         </td>
                       </tr>
@@ -1388,14 +1538,8 @@ const StateConfigs = () => {
                 <nav className="pagination-container">
                   <ul style={{ display: 'flex', padding: 0, margin: 0 }}>
                     {[...Array(totalPages)].map((_, i) => (
-                      <li
-                        key={i}
-                        className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}
-                      >
-                        <button
-                          className="page-link-style"
-                          onClick={() => handlePageChange(i + 1)}
-                        >
+                      <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
+                        <button className="page-link-style" onClick={() => handlePageChange(i + 1)}>
                           {i + 1}
                         </button>
                       </li>
@@ -1404,7 +1548,6 @@ const StateConfigs = () => {
                 </nav>
               )}
             </div>
-            
           </div>
         </div>
       </div>
