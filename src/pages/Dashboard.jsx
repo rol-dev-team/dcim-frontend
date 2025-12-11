@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, useMemo, useRef } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import DynamicSelectField from '../components/DynamicSelectField';
+import { DynamicSelectField } from '../components/DynamicSelectField';
 import { errorMessage } from './../api/api-config/apiResponseMessage';
 
 import { fetchDiagramSVG, getUserDataCenters } from '../api/settings/dataCenterApi';
