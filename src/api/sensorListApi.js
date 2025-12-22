@@ -82,3 +82,15 @@ export const fetchSensorTypeLists = async () => {
   //     throw error;
   //   }
   // };
+
+
+  export const fetchSensorRealTimeValueByDataCenter = async (dataCenterId) => {
+    try {
+      const response = await apiClient.get(
+        `/sensor-real-time/${dataCenterId}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
