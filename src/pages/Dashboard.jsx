@@ -72,22 +72,6 @@ const Dashboard = () => {
     }
   }, [dataCenterId]);
 
-  // useEffect(() => {
-  //     ablyAPI.connection.once("connected", () => {
-  //       console.log("Connected to Ably!");
-  //       console.log("Client ID:", ablyAPI.auth.clientId);
-  //     });
-  //     const channel = ablyAPI.channels.get("public:sensor-channel");
-  //     channel.subscribe("event_name", (message) => {
-  //       const incomingData = message.data?.comment;
-  //       setIncommingMQTTData(prev => [...prev, incomingData]);
-
-  //     });
-  //     return () => {
-  //       channel.unsubscribe();
-  //     };
-  //   }, []);
-
   useEffect(() => {
     if (incommingMQTTData?.length > 0 && dataCenterId && threshold.length) {
       const filteredDataCenter = incommingMQTTData.filter((item) => item.dc_id === dataCenterId);
@@ -153,79 +137,6 @@ const Dashboard = () => {
       }
     }
   }, [incommingMQTTData, dataCenterId, threshold]);
-
-  // useEffect(() => {
-  //   if (incommingMQTTData?.length > 0 && dataCenterId && stateConfig.length) {
-  //     const filteredDataCenter = incommingMQTTData.filter(item => item.dc_id === dataCenterId);
-  //     if (filteredDataCenter.length === 0) {
-  //     console.warn(`⚠️ No matching MQTT data found for dataCenterId: ${dataCenterId}`);
-  //     setLiveSomkeAndWaterSensorData([]);
-  //     return;
-  //   }
-  //     const latest = filteredDataCenter[filteredDataCenter.length - 1];
-
-  //     if (latest.dc_id === dataCenterId) {
-  //       const matchedSensorType = {
-  //         ...latest,
-  //         sensor_types: (latest.sensor_types || []).filter(item =>
-  //           allowedSmokeAndWaterSensorIds?.has(item.id)
-  //         ),
-  //       };
-
-  //       const enriched = {
-  //         ...matchedSensorType,
-  //         sensor_types: matchedSensorType.sensor_types.map(sensorType => {
-  //           const stateMatch = stateConfig?.find(
-  //             state =>
-  //               state.type_id === sensorType.id &&
-  //               sensorType.sensors.some(sensor => sensor.id === state.sensor_id)
-  //           );
-
-  //           const sensor_type_name = stateMatch?.type_name || null;
-
-  //           return {
-  //             ...sensorType,
-  //             sensor_type_name,
-
-  //             sensors: sensorType.sensors
-  //               .filter(sensor =>
-  //                 stateConfig.some(state =>
-  //                   state.sensor_id === sensor.id &&
-  //                   state.type_id === sensorType.id &&
-  //                   state.state_value === sensor.val
-  //                 )
-  //               )
-  //               .map(sensor => {
-  //                 const matchedStates = stateConfig
-  //                   ?.filter(state =>
-  //                     state.sensor_id === sensor.id &&
-  //                     state.type_id === sensorType.id &&
-  //                     state.state_value === sensor.val
-  //                   )
-  //                   .map(state => ({
-  //                     state_value: state.state_value,
-  //                     state_name: state.state_name,
-  //                     color: state.color,
-  //                     location: state.location,
-  //                   }));
-  //                 return {
-  //                   ...sensor,
-  //                   // states: matchedStates ?? [],
-  //                   ...(matchedStates && {
-  //                     state_name: matchedStates[0]?.state_name,
-  //                     color: matchedStates[0]?.color,
-  //                     location: matchedStates[0]?.location,
-  //                   }),
-  //                 };
-  //               }),
-  //           };
-  //         }),
-  //       };
-
-  //       setLiveSomkeAndWaterSensorData(enriched);
-  //     }
-  //   }
-  // }, [incommingMQTTData, dataCenterId, stateConfig]);
 
   useEffect(() => {
     if (!incommingMQTTData?.length || !dataCenterId || !stateConfig.length) return;
@@ -296,75 +207,7 @@ const Dashboard = () => {
   }, [incommingMQTTData, dataCenterId, stateConfig]);
 
   // SLD
-  // useEffect(() => {
-  //   if (incommingMQTTData?.length > 0 && dataCenterId && stateConfig.length) {
-  //     const filteredDataCenter = incommingMQTTData.filter(item => item.dc_id === dataCenterId);
-  //     if (filteredDataCenter.length === 0) {
-  //     console.warn(`⚠️ No matching MQTT data found for dataCenterId: ${dataCenterId}`);
-  //     setLiveSLDSensorData([]);
-  //     return;
-  //   }
-  //     const latest = filteredDataCenter[filteredDataCenter.length - 1];
-
-  //     if (latest.dc_id === dataCenterId) {
-  //       const matchedSensorType = {
-  //         ...latest,
-  //         sensor_types: (latest.sensor_types || []).filter(item =>
-  //           allowedSLDIds?.has(item.id)
-  //         ),
-  //       };
-
-  //       const enriched = {
-  //         ...matchedSensorType,
-  //         sensor_types: matchedSensorType.sensor_types.map(sensorType => {
-  //           const stateMatch = stateConfig?.find(
-  //             state =>state.type_id === sensorType.id );
-
-  //           const sensor_type_name = stateMatch?.type_name || null;
-
-  //           return {
-  //             ...sensorType,
-  //             sensor_type_name,
-
-  //             sensors: sensorType.sensors
-  //               .filter(sensor =>
-  //                 stateConfig.some(state =>
-  //                   state.type_id === sensorType.id &&
-  //                   state.state_value === sensor.val
-  //                 )
-  //               )
-  //               .map(sensor => {
-  //                 const matchedStates = stateConfig
-  //                   ?.filter(state =>
-  //                     state.type_id === sensorType.id &&
-  //                     state.state_value === sensor.val
-  //                   )
-  //                   .map(state => ({
-  //                     state_value: state.state_value,
-  //                     state_name: state.state_name,
-  //                     color: state.color,
-  //                     location: state.location,
-  //                   }));
-  //                 return {
-  //                   ...sensor,
-  //                   ...(matchedStates && {
-  //                     state_name: matchedStates[0]?.state_name,
-  //                     color: matchedStates[0]?.color,
-  //                     location: matchedStates[0]?.location,
-  //                   }),
-  //                 };
-  //               }),
-  //           };
-  //         }),
-  //       };
-
-  //       setLiveSLDSensorData(enriched);
-  //     }
-  //   }
-  // }, [incommingMQTTData, dataCenterId, stateConfig]);
-
   // combine two device
-
   useEffect(() => {
     if (incommingMQTTData?.length > 0 && dataCenterId && stateConfig.length) {
       const filteredDataCenter = incommingMQTTData.filter((item) => item.dc_id === dataCenterId);
@@ -537,7 +380,7 @@ const Dashboard = () => {
   };
   // console.log(threshold);
   // console.log(incommingMQTTData);
-  // console.log(stateConfig);
+  console.log('state-config: ---', stateConfig);
   // console.log(liveSomkeAndWaterSensorData);
   // console.log(diagramContent);
   // console.log(updatedDataCenter);
@@ -547,6 +390,8 @@ const Dashboard = () => {
   // console.log(alarmSensors);
   // console.log(liveControlSensorData?.sensor_types?.[0]);
   // console.log(liveControlSensorData);
+  console.log('sld', liveSLDSensorData);
+  console.log('live data', incommingMQTTData);
 
   return (
     <section>

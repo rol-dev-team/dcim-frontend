@@ -64,9 +64,9 @@ export const fetchSensorTypeLists = async () => {
   };
 
 
-  export const fetchSensorsByDevice = async (deviceId) => {
+  export const fetchSensorsByDevice = async (deviceId,sensorTypeId) => {
     try {
-      const response = await apiClient.get(`/sensor-lists/by-device/${deviceId}`);
+      const response = await apiClient.get(`/sensor-lists/by-device/${deviceId}/${sensorTypeId}`);
       return response.data;
     } catch (error) {
       throw error;

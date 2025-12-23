@@ -544,7 +544,7 @@ import {
   updateStateConfig,
   deleteStateConfig,
 } from '../../api/stateConfigApi';
-import { fetchSensorsByDevice } from '../../api/sensorListApi';
+import { fetchSensorsByDevice, fetchSensorTypeLists } from '../../api/sensorListApi';
 import { fetchDataCenters } from '../../api/settings/dataCenterApi';
 import { fetchDevicesByDataCenter } from '../../api/deviceApi';
 import { confirmAlert } from 'react-confirm-alert';
@@ -642,13 +642,16 @@ const StateConfigs = () => {
   const [currentStateConfigs, setCurrentStateConfigs] = useState([]);
   const [dataCenters, setDataCenters] = useState([]);
   const [devices, setDevices] = useState([]);
+  const [sensorTypeOptions,setSensorTypeOptions] = useState([]);
   const [sensors, setSensors] = useState([]);
   const [currentConfig, setCurrentConfig] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     data_center_id: '',
     device_id: '',
+    sensor_type: '',
     sensor_id: '',
+    path:'',
     value: '',
     name: '',
     attache_sound: '',
@@ -669,15 +672,16 @@ const StateConfigs = () => {
     try {
       const dataCenterId = config.sensor?.device?.data_center_id;
       const deviceId = config.sensor?.device_id;
+      const sensorTypeId = config.sensor?.sensor_type_list_id;
 
       if (dataCenterId) {
         const deviceResponse = await fetchDevicesByDataCenter(dataCenterId);
         setDevices(deviceResponse);
       }
-      if (deviceId) {
-        const allSensors = await fetchSensorsByDevice(deviceId);
-        const filteredSensors = allSensors.filter((sensor) => sensor.trigger_type_id === 2);
-        setSensors(filteredSensors);
+      if (deviceId && sensorTypeId) {
+        const triggerSensors = await fetchSensorsByDevice(deviceId,sensorTypeId);
+        setSensors(triggerSensors);
+        
       }
     } catch (err) {
       console.error('Error fetching dependent data for edit:', err);
@@ -687,9 +691,10 @@ const StateConfigs = () => {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        const [configsResponse, centers] = await Promise.all([
+        const [configsResponse, centers,sensorTypeRes] = await Promise.all([
           fetchStateConfigs(),
           fetchDataCenters(),
+          fetchSensorTypeLists(),
         ]);
 
         const fetchedConfigs = Array.isArray(configsResponse) ? configsResponse : [];
@@ -697,6 +702,7 @@ const StateConfigs = () => {
         setTotalPages(Math.ceil(fetchedConfigs.length / configsPerPage));
 
         setDataCenters(centers);
+        setSensorTypeOptions(sensorTypeRes);
         setLoading(false);
       } catch (err) {
         setError(err.message || 'Failed to load initial data.');
@@ -744,27 +750,65 @@ const StateConfigs = () => {
     }
   };
 
-  const handleDeviceChange = async (e) => {
-    const deviceId = e.target.value;
-    setFormData({
-      ...formData,
-      device_id: deviceId,
-      sensor_id: '',
-    });
+  // const handleDeviceChange = async (e) => {
+  //   const deviceId = e.target.value;
+  //   console.log('console.log: ',e);
+  //   setFormData({
+  //     ...formData,
+  //     device_id: deviceId,
+  //     sensor_id: '',
+  //   });
 
-    setSensors([]);
+  //   setSensors([]);
 
-    if (deviceId) {
-      try {
-        const allSensors = await fetchSensorsByDevice(deviceId);
-        // FUNCTIONALITY REMAINS: Filter by trigger_type_id = 2 (State)
-        const filteredSensors = allSensors.filter((sensor) => sensor.trigger_type_id === 2);
-        setSensors(filteredSensors);
-      } catch (err) {
-        setError(err.message || 'Failed to fetch sensors.');
-      }
-    }
-  };
+  //   if (deviceId) {
+  //     try {
+  //       const allSensors = await fetchSensorsByDevice(deviceId);
+  //       // FUNCTIONALITY REMAINS: Filter by trigger_type_id = 2 (State)
+  //       const filteredSensors = allSensors.filter((sensor) => sensor.trigger_type_id === 2);
+  //       setSensors(filteredSensors);
+  //     } catch (err) {
+  //       setError(err.message || 'Failed to fetch sensors.');
+  //     }
+  //   }
+  // };
+
+  const handleDeviceChange = (e) => {
+  const deviceId = e.target.value;
+
+  setFormData((prev) => ({
+    ...prev,
+    device_id: deviceId,
+    sensor_id: '',
+  }));
+
+  setSensors([]);
+};
+
+  const handleSensorTypeChange = async (e) => {
+  const sensorTypeId = e.target.value;
+
+  setFormData((prev) => ({
+    ...prev,
+    sensor_type: sensorTypeId,
+    sensor_id: '',
+  }));
+
+
+  if (!formData.device_id || !sensorTypeId) return;
+
+  try {
+    const triggerSensors = await fetchSensorsByDevice(
+      formData.device_id,
+      sensorTypeId
+    );
+
+
+    setSensors(triggerSensors);
+  } catch (err) {
+    setError(err.message || 'Failed to fetch sensors.');
+  }
+};
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -809,7 +853,9 @@ const StateConfigs = () => {
       setFormData({
         data_center_id: config.sensor?.device?.data_center_id || '',
         device_id: config.sensor?.device_id || '',
-        sensor_id: config.sensor_id,
+        sensor_type: config.sensor?.sensor_type_list_id || '',
+        sensor_id: config?.sensor_id,
+        path: config.path,
         value: config.value,
         name: config.name,
         attache_sound: config.attache_sound || '',
@@ -867,7 +913,9 @@ const StateConfigs = () => {
     setFormData({
       data_center_id: '',
       device_id: '',
+      sensor_type:'',
       sensor_id: '',
+      path:'',
       value: '',
       name: '',
       attache_sound: '',
@@ -929,6 +977,11 @@ const StateConfigs = () => {
         <div style={{ color: '#6b7280' }}>Loading...</div>
       </div>
     );
+
+    // console.log('config data:', currentStateConfigs);
+    console.log('formdata: ',formData);
+    // console.log('sensor list: ', sensors);
+
 
   return (
     <>
@@ -1140,9 +1193,6 @@ const StateConfigs = () => {
               >
                 {/* Data Center */}
                 <div>
-                  <label htmlFor="data_center_id" style={styles.labelStyle}>
-                    Data Center
-                  </label>
                   <select
                     id="data_center_id"
                     className="input-style"
@@ -1163,9 +1213,6 @@ const StateConfigs = () => {
 
                 {/* Device */}
                 <div>
-                  <label htmlFor="device_id" style={styles.labelStyle}>
-                    Device
-                  </label>
                   <select
                     id="device_id"
                     className="input-style"
@@ -1185,11 +1232,31 @@ const StateConfigs = () => {
                   </select>
                 </div>
 
+                    {/* Sensor Types */}
+                    <div>
+                  <select
+                    id="sensor_type"
+                    className="input-style"
+                    style={styles.inputStyle}
+                    name="sensor_type"
+                    value={formData.sensor_type}
+                    onChange={handleSensorTypeChange}
+                    required
+                    disabled={!formData.device_id}
+                >
+                  <option value="">Select Sensor Type</option>
+                  {sensorTypeOptions.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.name || `Type ${type.id}`}
+                    </option>
+                  ))}
+                </select>
+                {sensorTypeOptions.length === 0 && (
+                  <div className="text-danger small">No sensor types available</div>
+                )}
+              </div>
                 {/* Sensor (Trigger Type State) */}
                 <div>
-                  <label htmlFor="sensor_id" style={styles.labelStyle}>
-                    Select Sensor (Trigger Type State)
-                  </label>
                   <select
                     id="sensor_id"
                     className="input-style"
@@ -1220,11 +1287,24 @@ const StateConfigs = () => {
                   )}
                 </div>
 
-                {/* Value */}
+                {(formData.sensor_type == 3 || (isEditing && formData.sensor_type == 3)) && (
                 <div>
-                  <label htmlFor="value" style={styles.labelStyle}>
-                    Value
-                  </label>
+
+                  <input
+                    id="path"
+                    type="text"
+                    className="input-style"
+                    style={styles.inputStyle}
+                    name="path"
+                    value={formData.path}
+                    onChange={handleInputChange}
+                    required
+                    placeholder=' Path ID (SLD)'
+                  />
+                </div>
+                )}
+                
+                <div>
                   <input
                     id="value"
                     type="number"
@@ -1234,14 +1314,12 @@ const StateConfigs = () => {
                     value={formData.value}
                     onChange={handleInputChange}
                     required
+                    placeholder='Enter value'
                   />
                 </div>
 
                 {/* Name */}
                 <div>
-                  <label htmlFor="name" style={styles.labelStyle}>
-                    Name
-                  </label>
                   <input
                     id="name"
                     type="text"
@@ -1251,6 +1329,7 @@ const StateConfigs = () => {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
+                    placeholder='Enter name'
                   />
                 </div>
 
@@ -1393,7 +1472,33 @@ const StateConfigs = () => {
                           letterSpacing: '0.05em',
                         }}
                       >
+                        Sensor Type
+                      </th>
+                      <th
+                        style={{
+                          padding: '12px 24px',
+                          textAlign: 'left',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: '#6b7280',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
                         Sensor
+                      </th>
+                      <th
+                        style={{
+                          padding: '12px 24px',
+                          textAlign: 'left',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: '#6b7280',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
+                        Path (SLD)
                       </th>
                       <th
                         style={{
@@ -1468,7 +1573,13 @@ const StateConfigs = () => {
                             {config.sensor?.device?.data_center?.name || 'N/A'}
                           </td>
                           <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>
+                            {config.sensor?.sensor_type?.name ||'--'}
+                          </td>
+                          <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>
                             {config.sensor?.name || `Sensor ${config.sensor_id}`}
+                          </td>
+                          <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>
+                            {config.path }
                           </td>
                           <td style={{ padding: '16px 24px', fontSize: '14px', color: '#374151' }}>
                             {config.value}
